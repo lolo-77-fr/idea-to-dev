@@ -1,6 +1,6 @@
 ---
 name: product-brief
-description: Structure un cadrage produit synthétique (vision, utilisateurs/parties prenantes si pertinent, périmètre MVP vs futur, objectifs et métriques de succès, contraintes) à partir d'une idée déjà explorée. Utiliser ce skill quand l'utilisateur veut cadrer un projet/feature avant de rédiger un PRD, parler de "brief produit", "blueprint", ou structurer une idée en vue du développement. Produit un fichier BRIEF.md synthétique. Deuxième étape du pipeline idée → dev (suit brainstorm, précède prd, cdc-technique, dev-loop, dev-memory).
+description: Structure un cadrage produit synthétique (vision, utilisateurs/parties prenantes si pertinent, périmètre MVP vs futur, objectifs et métriques de succès, contraintes) à partir d'une idée déjà explorée. Utiliser ce skill quand l'utilisateur veut cadrer un projet/feature avant de rédiger un PRD, parler de "brief produit", "blueprint", ou structurer une idée en vue du développement. Produit un fichier BRIEF.md synthétique. Deuxième étape du pipeline idée → dev (suit brainstorm, précède prd, ui-screens, cdc-technique, dev-loop, dev-memory).
 ---
 
 # Product Brief
@@ -15,6 +15,10 @@ Moins de friction que `brainstorm` : à ce stade, l'idée a normalement déjà �
 - **Si aucun `BRAINSTORM.md` n'existe**, le signaler à l'utilisateur et proposer de lancer `brainstorm` d'abord — sans l'imposer. Si l'utilisateur préfère continuer directement, garder un niveau de challenge ciblé sur les zones manifestement floues (pas le mode incisif complet de `brainstorm`, mais ne pas remplir des cases sur des suppositions non vérifiées).
 - **Une question à la fois** quand une clarification est nécessaire, avec recommandation de Claude.
 - **Pragmatique et synthétique.** Pas de remplissage de sections pour la forme — si une section n'apporte rien pour ce projet, l'omettre.
+
+## Répercussion des changements (règle transverse)
+
+Le "Périmètre MVP" de `BRIEF.md` est la référence de scope pour tout le reste du pipeline. Si en le rédigeant (ou en le retravaillant plus tard) le périmètre s'élargit clairement au-delà de ce qui était dans `BRAINSTORM.md`, le signaler comme une extension volontaire plutôt que de l'intégrer silencieusement. Si l'utilisateur confirme que c'est voulu, mettre à jour `BRAINSTORM.md` en cohérence si besoin. À l'inverse, si un changement de scope est décidé plus tard (en `prd`, `ui-screens` ou `cdc-technique`), c'est ce fichier (`BRIEF.md`) qu'il faudra mettre à jour en premier — cf. règle détaillée dans l'orchestrateur `idea-to-dev`.
 
 ## Déroulé
 
@@ -77,7 +81,7 @@ Omettre toute section vide ou non pertinente plutôt que la laisser en placehold
 
 ## Emplacement des fichiers
 
-Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet — donc `BRAINSTORM.md` et `BRIEF.md` désignent `.idea-to-dev/BRAINSTORM.md` et `.idea-to-dev/BRIEF.md`.
+Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — donc `BRAINSTORM.md` et `BRIEF.md` désignent `.idea-to-dev/BRAINSTORM.md` et `.idea-to-dev/BRIEF.md`.
 
 - **Avec accès au système de fichiers** : chercher `.idea-to-dev/BRAINSTORM.md`, et écrire `.idea-to-dev/BRIEF.md` dans ce même dossier (le créer s'il n'existe pas).
 - **En chat sans accès fichiers** : demander à l'utilisateur s'il a un `BRAINSTORM.md` à coller/uploader (ou s'il préfère continuer sans), puis produire `BRIEF.md` et indiquer de l'enregistrer dans `.idea-to-dev/BRIEF.md`.

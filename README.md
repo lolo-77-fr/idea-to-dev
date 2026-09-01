@@ -5,20 +5,24 @@ Pipeline de skills Claude pour aller d'une idée vague à un projet prêt à dé
 ## Pipeline
 
 ```
-brainstorm → product-brief → prd → cdc-technique → dev-loop → dev-memory
+brainstorm → product-brief → prd → ui-screens → cdc-technique → dev-loop → dev-memory
 ```
+
+`mvp-check` n'est pas une étape séquentielle : il est invocable à tout moment (fin de `dev-loop`, point d'étape intermédiaire, ou sur demande) pour vérifier la conformité de l'état réel du projet au périmètre défini.
 
 | Skill | Rôle | Sortie |
 |---|---|---|
 | `brainstorm` | Clarifie une idée vague en challengeant l'utilisateur, converge vers un problème net + idées retenues/écartées | `BRAINSTORM.md` |
 | `product-brief` | Cadre le produit : vision, périmètre MVP/futur, objectifs, contraintes | `BRIEF.md` |
 | `prd` | Détaille le comportement fonctionnel de chaque brique (entrées/sorties, règles, statuts, cas limites) | `PRD.md` |
-| `cdc-technique` | Traduit le fonctionnel en choix techniques : stack, architecture, intégrations, découpage technique | `CDC.md` |
+| `ui-screens` | Détaille les écrans/vues du MVP : objectif, éléments affichés, actions, navigation (texte, pas de wireframe) — obligatoire, non-sautable | `SCREENS.md` |
+| `cdc-technique` | Traduit le fonctionnel en choix techniques : stack, architecture, intégrations, découpage technique — clôturé par une checklist de complétude | `CDC.md` |
 | `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut | `TASKS.md` |
-| `dev-memory` | Mémoire de session : décisions en cours de route, pièges, debug actif, points de retour | `MEMORY.md` |
-| `idea-to-dev` | Orchestrateur — enchaîne les 6 skills ci-dessus sur un même projet | — |
+| `dev-memory` | Mémoire de session : décisions en cours de route, pièges, debug actif, points de retour ; sert aussi de point de départ à la réconciliation d'un projet ayant évolué hors-pipeline | `MEMORY.md` |
+| `mvp-check` | Vérifie la conformité de l'état réel (code/tâches) au périmètre `BRIEF.md`/`PRD.md`/`SCREENS.md`, invocable à tout moment | — |
+| `idea-to-dev` | Orchestrateur — enchaîne les 7 skills séquentiels ci-dessus, gère reprise de projet existant et répercussion des changements de scope | — |
 
-Tous les documents produits sont stockés dans `.idea-to-dev/` à la racine du projet cible.
+Tous les documents produits sont stockés dans `.idea-to-dev/` à la racine du projet cible (ou `.idea-to-dev/[nom-feature]/` pour une nouvelle feature sur un projet déjà passé par le pipeline).
 
 ## Installation
 
@@ -50,6 +54,7 @@ Chaque skill lit/écrit ses documents dans `.idea-to-dev/` à la racine du proje
 ├── BRAINSTORM.md
 ├── BRIEF.md
 ├── PRD.md
+├── SCREENS.md
 ├── CDC.md
 ├── TASKS.md
 └── MEMORY.md

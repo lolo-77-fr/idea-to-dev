@@ -1,11 +1,11 @@
 ---
 name: prd
-description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit brainstorm et product-brief, précède cdc-technique, dev-loop, dev-memory).
+description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit brainstorm et product-brief, précède ui-screens, cdc-technique, dev-loop, dev-memory).
 ---
 
 # PRD (Product Requirements Document)
 
-Troisième maillon du pipeline "idée → dev". Détaille le **comportement fonctionnel** de chaque brique définie dans `BRIEF.md` (périmètre MVP) — c'est le passage du "quoi" au "comment ça se comporte", avant de passer au "comment c'est construit" (`cdc-technique`).
+Troisième maillon du pipeline "idée → dev". Détaille le **comportement fonctionnel** de chaque brique définie dans `BRIEF.md` (périmètre MVP) — c'est le passage du "quoi" au "comment ça se comporte", avant de passer aux écrans (`ui-screens`) puis à l'architecture technique (`cdc-technique`).
 
 ## Posture
 
@@ -14,6 +14,10 @@ Même logique que `product-brief` : structuration avec challenge ciblé sur le f
 - **Détecter `BRIEF.md`.** S'il existe, partir de son "Périmètre MVP" : chaque capacité listée devient une section à détailler fonctionnellement. S'il n'existe pas, le signaler et proposer `product-brief` d'abord (sans imposer).
 - **Une question à la fois**, avec recommandation, sur les points de comportement non précisés (ex. "que se passe-t-il si la génération du draft échoue — on retente, on notifie, on laisse en attente ?").
 - **Pragmatique.** Ne pas spéculer sur des cas limites improbables pour un petit outil interne. Si une question de comportement n'a clairement aucun enjeu pour ce projet, ne pas la poser.
+
+## Répercussion des changements (règle transverse)
+
+Le PRD détaille le "comment ça se comporte" des briques du `BRIEF.md` — il ne doit pas, en le faisant, ajouter de nouvelles briques hors périmètre. Si en détaillant une brique un besoin apparaît qui dépasse ce que listait le "Périmètre MVP" du `BRIEF.md`, le signaler explicitement ("Ceci n'était pas dans le périmètre initial — extension volontaire ou on recadre ?") plutôt que de l'ajouter silencieusement. Sur confirmation, mettre à jour `BRIEF.md` en conséquence. Règle détaillée portée par l'orchestrateur `idea-to-dev`.
 
 ## Format : description fonctionnelle par brique (par défaut)
 
@@ -81,7 +85,7 @@ Omettre toute sous-section non pertinente (statuts, cas limites, user stories) p
 
 ## Emplacement des fichiers
 
-Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet — `BRIEF.md` et `PRD.md` désignent `.idea-to-dev/BRIEF.md` et `.idea-to-dev/PRD.md`.
+Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — `BRIEF.md` et `PRD.md` désignent les fichiers de ce dossier.
 
 - **Avec accès au système de fichiers** : chercher `.idea-to-dev/BRIEF.md`, écrire `.idea-to-dev/PRD.md` dans ce même dossier.
 - **En chat sans accès fichiers** : demander à l'utilisateur de coller/uploader `BRIEF.md` si disponible, puis indiquer d'enregistrer `PRD.md` dans `.idea-to-dev/PRD.md`.
@@ -90,5 +94,5 @@ Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du proje
 
 Une fois `PRD.md` créé et confirmé :
 
-- Proposer optionnellement de passer à `cdc-technique`, sans insister.
+- Proposer optionnellement de passer à `ui-screens`, sans insister.
 - Ne pas générer de prompt pour la suite sauf demande explicite.

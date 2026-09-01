@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: Aide à clarifier une idée de projet ou de fonctionnalité floue en challengeant l'utilisateur de façon pragmatique, une question à la fois, jusqu'à converger vers un problème clairement défini et une liste d'idées retenues/écartées. Utiliser ce skill quand l'utilisateur a une idée vague, veut "brainstormer", explorer un concept, ou démarrer un nouveau projet/feature sans cadrage clair. Produit un fichier BRAINSTORM.md synthétique en sortie. Première étape du pipeline idée → dev (suivi de product-brief, prd, cdc-technique, dev-loop, dev-memory).
+description: Aide à clarifier une idée de projet ou de fonctionnalité floue en challengeant l'utilisateur de façon pragmatique, une question à la fois, jusqu'à converger vers un problème clairement défini et une liste d'idées retenues/écartées. Utiliser ce skill quand l'utilisateur a une idée vague, veut "brainstormer", explorer un concept, ou démarrer un nouveau projet/feature sans cadrage clair. Produit un fichier BRAINSTORM.md synthétique en sortie. Première étape du pipeline idée → dev (suivi de product-brief, prd, ui-screens, cdc-technique, dev-loop, dev-memory).
 ---
 
 # Brainstorm
@@ -17,6 +17,11 @@ Claude joue le rôle d'un sparring-partner pragmatique, pas d'un assistant qui v
 - **Toujours proposer une recommandation.** Pour chaque question posée, donner son avis ("je pencherais pour X parce que Y") — l'utilisateur peut valider rapidement ou trancher différemment.
 - **Pragmatique.** L'objectif n'est pas l'exhaustivité théorique mais d'arriver vite à quelque chose d'actionnable. Si une piste n'a clairement aucun intérêt, le dire et proposer de l'écarter plutôt que de la documenter pour la forme.
 - **Détecter le contexte existant.** Si un `BRAINSTORM.md`, `BRIEF.md` ou autre doc du pipeline existe déjà dans le projet, le lire d'abord et partir de là plutôt que de recommencer à zéro.
+- **Détecter du code existant (projet non greenfield).** Si le projet a déjà du code mais aucun doc `.idea-to-dev/` (démarrage du pipeline sur un projet en cours), inventorier brièvement les contraintes que cet existant impose (stack, archi, conventions déjà en place) et les traiter comme des contraintes non négociables dès cette étape — pas comme des options à explorer librement. Ne pas rejouer un brainstorm complet sur les choix techniques déjà actés par le code réel.
+
+## Répercussion des changements (règle transverse)
+
+Si en construisant ce brainstorm, un changement de cap apparaît par rapport à une idée déjà actée ailleurs (ex. reprise d'un projet dont le `BRIEF.md` existait déjà), le signaler explicitement plutôt que de l'absorber silencieusement, et proposer la mise à jour du doc concerné une fois confirmé. Cette règle est portée en détail par l'orchestrateur `idea-to-dev` — ce skill s'y conforme quand il est invoqué seul.
 
 ## Déroulé
 
@@ -31,7 +36,7 @@ Claude joue le rôle d'un sparring-partner pragmatique, pas d'un assistant qui v
    Si l'utilisateur arrive directement avec une solution en tête, ne pas hésiter à remonter d'un niveau : "OK mais quel problème ça résout concrètement ?"
 
 3. **Explorer les pistes.** Une fois le problème clair, explorer les angles possibles :
-   - Poser des questions sur les contraintes (technique, temps, budget, périmètre réaliste vu le contexte de l'utilisateur).
+   - Poser des questions sur les contraintes (technique, temps, budget, périmètre réaliste vu le contexte de l'utilisateur — y compris les contraintes du code existant si détecté à l'étape Posture).
    - Proposer des alternatives à ce que l'utilisateur a en tête si ça semble pertinent ("as-tu pensé à X à la place / en complément ?").
    - Challenger les pistes faibles : si une idée a un coût/bénéfice clairement défavorable, le signaler et suggérer de l'écarter plutôt que de continuer à la creuser par politesse.
    - **Rester haut niveau.** Ne pas descendre dans le détail d'architecture technique (quels outils précis, comment ils s'articulent) — ça relève de `product-brief`/`cdc-technique`. Le brainstorm reste au niveau des idées et de leur pertinence, pas de leur implémentation.
@@ -58,6 +63,10 @@ Date : [date]
 
 [2-5 phrases : qui est concerné, quelle douleur/besoin, pourquoi c'est pertinent maintenant]
 
+## Contraintes de l'existant <!-- si projet avec code déjà en place -->
+
+- [Contrainte technique imposée par le code/l'archi déjà là]
+
 ## Idées retenues
 
 - **[Idée 1]** — [pourquoi elle tient la route, en une phrase]
@@ -81,7 +90,7 @@ Si une section n'a rien (par ex. aucune idée écartée), l'omettre plutôt que 
 
 ## Emplacement des fichiers
 
-Tous les documents du pipeline (ce skill et les suivants) vivent dans `.idea-to-dev/` à la racine du projet — donc `BRAINSTORM.md` désigne `.idea-to-dev/BRAINSTORM.md`, etc.
+Tous les documents du pipeline (ce skill et les suivants) vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — donc `BRAINSTORM.md` désigne `.idea-to-dev/BRAINSTORM.md`, etc.
 
 - **Avec accès au système de fichiers** (Claude Code, Antigravity, environnement avec outils fichiers) : créer le dossier `.idea-to-dev/` s'il n'existe pas, et y écrire/lire directement `BRAINSTORM.md`.
 - **En chat sans accès fichiers** : produire le contenu de `BRAINSTORM.md` normalement, puis indiquer explicitement à l'utilisateur de l'enregistrer dans `.idea-to-dev/BRAINSTORM.md` à la racine du projet — pour que les étapes suivantes (et l'utilisateur) sachent où le retrouver.

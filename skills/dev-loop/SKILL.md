@@ -1,11 +1,11 @@
 ---
 name: dev-loop
-description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Cinquième étape du pipeline idée → dev (suit cdc-technique, précède/accompagne dev-memory).
+description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Sixième étape du pipeline idée → dev (suit cdc-technique, précède/accompagne dev-memory).
 ---
 
 # Dev Loop
 
-Cinquième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-tâches exécutables** (2-5 minutes chacune), avec chemins de fichiers exacts et critères de vérification — et maintient leur statut au fil du développement.
+Sixième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-tâches exécutables** (2-5 minutes chacune), avec chemins de fichiers exacts et critères de vérification — et maintient leur statut au fil du développement.
 
 ## Posture
 
@@ -13,6 +13,10 @@ Cinquième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-
 - **Granularité fine, inspirée de Superpowers** : chaque tâche doit être réalisable en 2-5 minutes par un agent codant sans contexte projet préalable. Si une tâche semble plus grosse, la découper davantage plutôt que de la laisser vague.
 - **Concret, pas de pseudo-code.** Chaque tâche précise : quoi faire, où (chemin de fichier exact ou à créer), et comment vérifier que c'est fait (test, commande, comportement observable) — mais sans écrire le code lui-même (ça reste le travail de l'IA codante/Antigravity).
 - **Respecter les dépendances du CDC.** L'ordre des tâches suit les dépendances identifiées dans "Découpage technique" (ex. "Base Notion → tous les workflows").
+
+## Répercussion des changements (règle transverse)
+
+Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `CDC.md`) — nouveau besoin, correction de comportement, ajustement de scope —, ne pas se contenter d'ajouter une tâche isolée : signaler explicitement quel doc amont est concerné, et proposer sa mise à jour une fois confirmé (cf. règle détaillée dans l'orchestrateur `idea-to-dev`). Si ce changement rend une ou plusieurs tâches déjà faites (`[x]`) potentiellement obsolètes ou incomplètes, les signaler nommément à l'utilisateur — sans les repasser automatiquement à `[ ]` ou `[~]`, c'est à lui de trancher.
 
 ## Déroulé — création initiale de TASKS.md
 
@@ -67,11 +71,11 @@ Quand l'utilisateur revient sur le projet :
 - **Lire `TASKS.md` existant** pour voir l'état d'avancement avant toute action.
 - **Mettre à jour les statuts** au fur et à mesure que les tâches sont complétées (sur indication de l'utilisateur, ou en le déduisant si le contexte de la conversation le montre clairement — dans ce cas, confirmer avec l'utilisateur avant de marquer comme fait).
 - **Si une tâche s'avère mal calibrée** (trop grosse, dépendance oubliée, plus pertinente) en cours de réalisation, l'ajuster directement dans `TASKS.md` (la scinder, la reformuler, ajouter une tâche manquante) plutôt que de laisser le fichier devenir obsolète.
-- **Si de nouvelles tâches émergent** naturellement pendant le développement (besoin non anticipé au CDC), les ajouter à la suite de la brique concernée, ou dans une section "Tâches ajoutées en cours de dev" si elles ne rattachent à aucune brique existante.
+- **Si de nouvelles tâches émergent** naturellement pendant le développement (besoin non anticipé au CDC), les ajouter à la suite de la brique concernée, ou dans une section "Tâches ajoutées en cours de dev" si elles ne rattachent à aucune brique existante — et vérifier si ce besoin doit aussi remonter au CDC/PRD (cf. règle de répercussion des changements ci-dessus).
 
 ## Emplacement des fichiers
 
-Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet — `CDC.md` et `TASKS.md` désignent `.idea-to-dev/CDC.md` et `.idea-to-dev/TASKS.md`.
+Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — `CDC.md` et `TASKS.md` désignent les fichiers de ce dossier.
 
 - **Avec accès au système de fichiers** : chercher `.idea-to-dev/CDC.md`, créer/mettre à jour `.idea-to-dev/TASKS.md` dans ce même dossier — y compris les mises à jour de statuts au fil du dev.
 - **En chat sans accès fichiers** : demander à l'utilisateur de coller/uploader `CDC.md` si disponible, puis indiquer d'enregistrer `TASKS.md` dans `.idea-to-dev/TASKS.md`. Pour les mises à jour ultérieures, demander à l'utilisateur de fournir le `TASKS.md` actuel pour le modifier.
@@ -79,4 +83,5 @@ Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du proje
 ## Fin de session
 
 - Proposer optionnellement `dev-memory` pour consigner le contexte de session si pertinent (ex. fin de journée de dev, reprise prévue plus tard).
-- Pas de génération de prompt pour la suite — ce rôle revient à `compile-prompt`.
+- Proposer optionnellement `mvp-check` si toutes les tâches connues sont faites, pour vérifier la conformité au périmètre avant de considérer le projet/feature livré.
+- Pas de génération de prompt pour la suite sauf demande explicite.

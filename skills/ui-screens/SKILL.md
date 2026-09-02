@@ -1,6 +1,6 @@
 ---
 name: ui-screens
-description: Détaille les écrans/vues du MVP — objectif, éléments affichés, actions possibles, navigation — à partir d'un PRD déjà rédigé. Purement textuel, sans mise en page ni wireframe visuel. Utiliser ce skill quand l'utilisateur veut cadrer les écrans/pages d'un projet avant l'architecture technique, parle d'"écrans", "vues", "pages", "parcours utilisateur", ou veut préciser ce que l'utilisateur voit et peut faire sur chaque écran. Produit un fichier SCREENS.md. Quatrième étape du pipeline idée → dev (suit brainstorm, product-brief et prd, précède cdc-technique ; obligatoire, non-sautable, y compris pour des projets avec interface minimale).
+description: Détaille les écrans/vues du MVP — objectif, éléments affichés, actions possibles, navigation — à partir d'un PRD déjà rédigé. Purement textuel, sans mise en page ni wireframe visuel. Utiliser ce skill quand l'utilisateur veut cadrer les écrans/pages d'un projet avant l'architecture technique, parle d'"écrans", "vues", "pages", "parcours utilisateur", ou veut préciser ce que l'utilisateur voit et peut faire sur chaque écran. Produit un fichier SCREENS.md. Quatrième étape du pipeline idée → dev (suit brainstorm, product-brief et prd, précède ui-design et cdc-technique ; obligatoire, non-sautable, y compris pour des projets avec interface minimale).
 ---
 
 # UI Screens
@@ -98,5 +98,5 @@ Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du proje
 
 Une fois `SCREENS.md` créé et confirmé :
 
-- Proposer optionnellement de passer à `cdc-technique`, sans insister.
+- Proposer optionnellement de passer à `ui-design`, sans insister.
 - Ne pas générer de prompt pour la suite sauf demande explicite.

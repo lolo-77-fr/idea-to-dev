@@ -1,21 +1,22 @@
 ---
 name: mvp-check
-description: Vérifie la conformité de l'état réel d'un projet (code ou tâches déclarées) par rapport au périmètre défini dans BRIEF.md, PRD.md et SCREENS.md — fonctionnalité par fonctionnalité, écran par écran, pas seulement statut des tâches cochées. Utiliser ce skill quand l'utilisateur veut vérifier si le MVP est conforme, demande un "check MVP", "vérification de conformité", "est-ce qu'on est bons par rapport au brief/PRD", ou avant de considérer un projet/feature comme livré. Invocable à tout moment du pipeline idée → dev, pas uniquement en fin de parcours — utile aussi pour un point d'étape intermédiaire pendant le développement.
+description: Vérifie la conformité de l'état réel d'un projet (code ou tâches déclarées) par rapport au périmètre défini dans BRIEF.md, PRD.md, SCREENS.md et DESIGN.md — fonctionnalité par fonctionnalité, écran par écran, pas seulement statut des tâches cochées. Utiliser ce skill quand l'utilisateur veut vérifier si le MVP est conforme, demande un "check MVP", "vérification de conformité", "est-ce qu'on est bons par rapport au brief/PRD", ou avant de considérer un projet/feature comme livré. Invocable à tout moment du pipeline idée → dev, pas uniquement en fin de parcours — utile aussi pour un point d'étape intermédiaire pendant le développement.
 ---
 
 # MVP Check
 
-Vérification de conformité entre ce qui a été **défini** (`BRIEF.md`, `PRD.md`, `SCREENS.md`) et ce qui a été **réalisé** (code réel, ou à défaut `TASKS.md`/`MEMORY.md`). Ne fait pas partie de l'enchaînement séquentiel du pipeline — invocable à tout moment, y compris en cours de développement pour un point d'étape.
+Vérification de conformité entre ce qui a été **défini** (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`) et ce qui a été **réalisé** (code réel, ou à défaut `TASKS.md`/`MEMORY.md`). Ne fait pas partie de l'enchaînement séquentiel du pipeline — invocable à tout moment, y compris en cours de développement pour un point d'étape.
 
 ## Posture
 
 - **Vérifier le fond, pas le statut.** Une tâche cochée dans `TASKS.md` ne garantit pas que la fonctionnalité correspond fidèlement à ce que demandait le PRD — toujours comparer au contenu réel du PRD/SCREENS, pas seulement à l'avancement déclaré.
 - **Rester factuel.** Le verdict distingue clairement ce qui est vérifié (conforme), ce qui est incertain (pas assez d'information pour trancher), et ce qui est un écart avéré.
 - **Ne pas élargir le périmètre.** Ce skill vérifie la conformité au périmètre existant — il ne propose pas de nouvelles fonctionnalités ni n'étend le scope. Si un écart révèle un besoin de recadrage, le signaler et renvoyer vers la règle de répercussion des changements plutôt que de trancher soi-même.
+- **Design system — vérification limitée sans accès visuel.** La conformité à `DESIGN.md` (tokens/composants réellement implémentés) ne peut être vérifiée finement qu'avec accès au code (classes CSS, variables utilisées). Sans cet accès, se limiter à vérifier que les composants prévus existent dans le code/l'interface, sans juger le rendu visuel précis.
 
 ## Déroulé
 
-1. **Rassembler les références.** Chercher `BRIEF.md` (périmètre MVP), `PRD.md` (comportement fonctionnel), `SCREENS.md` (écrans). Si l'un est absent, le signaler et vérifier sur la base de ce qui est disponible.
+1. **Rassembler les références.** Chercher `BRIEF.md` (périmètre MVP), `PRD.md` (comportement fonctionnel), `SCREENS.md` (écrans), `DESIGN.md` (design system). Si l'un est absent, le signaler et vérifier sur la base de ce qui est disponible.
 
 2. **Déterminer la source de vérité sur l'état réel :**
    - **Avec accès au code** : inspecter le code pour vérifier la présence et le comportement réel de chaque brique/écran — pas seulement lire `TASKS.md`.

@@ -1,11 +1,11 @@
 ---
 name: idea-to-dev
-description: Orchestre le pipeline complet "idée → dev" en enchaînant automatiquement brainstorm, product-brief, prd, ui-screens, cdc-technique, dev-loop et dev-memory sur un même projet, en proposant de passer à l'étape suivante à la fin de chacune. Gère aussi le démarrage sur un projet existant (code sans docs, nouvelle feature sur projet déjà passé par le pipeline, ou projet ayant évolué hors-pipeline) et la répercussion d'un changement de scope sur les docs déjà produits. Utiliser ce skill quand l'utilisateur veut lancer un nouveau projet/feature de bout en bout, dit "lance le pipeline complet", "on part de zéro sur ce projet", ou veut une vue d'ensemble de l'avancement dans le pipeline idée → dev. À la fin du pipeline, adapte la suite selon le contexte d'exécution (chat vs agent codant avec accès au code).
+description: Orchestre le pipeline complet "idée → dev" en enchaînant automatiquement brainstorm, product-brief, prd, ui-screens, ui-design, cdc-technique, dev-loop et dev-memory sur un même projet, en proposant de passer à l'étape suivante à la fin de chacune. Gère aussi le démarrage sur un projet existant (code sans docs, nouvelle feature sur projet déjà passé par le pipeline, ou projet ayant évolué hors-pipeline) et la répercussion d'un changement de scope sur les docs déjà produits. Utiliser ce skill quand l'utilisateur veut lancer un nouveau projet/feature de bout en bout, dit "lance le pipeline complet", "on part de zéro sur ce projet", ou veut une vue d'ensemble de l'avancement dans le pipeline idée → dev. À la fin du pipeline, adapte la suite selon le contexte d'exécution (chat vs agent codant avec accès au code).
 ---
 
 # Idea to Dev — Orchestrateur de pipeline
 
-Chef d'orchestre des 7 skills du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. `mvp-check` complète le pipeline mais n'est pas une étape séquentielle — il est invocable à tout moment (voir plus bas).
+Chef d'orchestre des 8 skills du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `ui-design` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. `mvp-check` complète le pipeline mais n'est pas une étape séquentielle — il est invocable à tout moment (voir plus bas).
 
 ## Rôle
 
@@ -26,7 +26,7 @@ Ce skill ne refait pas le travail des skills qu'il orchestre — il les invoque 
 
    Ces trois cas ne sont pas exclusifs entre eux (ex. cas B + cas C : nouvelle feature sur un projet qui a aussi dérivé hors-pipeline sur l'ancienne). Si le contexte est ambigu, demander à l'utilisateur plutôt que de supposer.
 
-2. **Détecter l'état du projet (dans le sous-dossier concerné si cas B).** Chercher les docs existants dans `.idea-to-dev/` (ou `.idea-to-dev/[nom-feature]/`) : `BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `CDC.md`, `TASKS.md`, `MEMORY.md`.
+2. **Détecter l'état du projet (dans le sous-dossier concerné si cas B).** Chercher les docs existants dans `.idea-to-dev/` (ou `.idea-to-dev/[nom-feature]/`) : `BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, `MEMORY.md`.
    - Aucun doc / dossier absent → démarrer à `brainstorm` (en tenant compte du cas A si applicable). Le dossier sera créé par le premier skill qui écrit un fichier.
    - Certains docs présents → reprendre à la première étape manquante (ex. `BRAINSTORM.md` + `BRIEF.md` présents → reprendre à `prd`).
    - Tous présents → le projet est déjà passé par tout le pipeline ; informer l'utilisateur et demander ce qu'il souhaite faire (relancer une étape spécifique, passer directement à l'exécution dev via `dev-loop`/`dev-memory`, ou lancer un `mvp-check`).
@@ -35,13 +35,13 @@ Ce skill ne refait pas le travail des skills qu'il orchestre — il les invoque 
 
 ## Enchaînement
 
-Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `cdc-technique`, `dev-loop`, `dev-memory`, dans cet ordre) :
+Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-design`, `cdc-technique`, `dev-loop`, `dev-memory`, dans cet ordre) :
 
 1. Suivre intégralement les instructions du skill correspondant (posture, déroulé, format de sortie, validation progressive — rien n'est raccourci ou simplifié sous prétexte d'orchestration). Chaque skill porte sa propre exigence de complétude (en particulier `cdc-technique`, qui ne se clôture qu'après sa checklist dédiée) — l'orchestrateur ne doit pas la contourner en pressant la transition.
 2. Une fois le doc de l'étape produit et confirmé, **proposer explicitement de passer à l'étape suivante** plutôt que d'enchaîner automatiquement sans accord — l'utilisateur peut vouloir s'arrêter, faire une pause, ou retravailler l'étape courante.
 3. Si l'utilisateur décline ou veut s'arrêter, arrêter l'orchestration là — les docs déjà produits restent utilisables indépendamment.
 
-`ui-screens` est **obligatoire**, y compris pour un projet à interface minimale — ne jamais le sauter ni le proposer comme optionnel.
+`ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels.
 
 `dev-loop` et `dev-memory` peuvent être traités comme un duo final : une fois `TASKS.md` créé par `dev-loop`, proposer `dev-memory` pour initialiser `MEMORY.md` avant de conclure.
 
@@ -51,7 +51,7 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `cdc-tec
 
 Mécanique, applicable par chaque skill quel qu'il soit (et rappelée dans chacun) :
 
-1. **Signaler.** Dès qu'un skill détecte qu'il introduit ou nécessite quelque chose qui dépasse le périmètre défini par un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `CDC.md`), le dire explicitement — quel changement, quel(s) doc(s) amont concernés — plutôt que de l'absorber silencieusement.
+1. **Signaler.** Dès qu'un skill détecte qu'il introduit ou nécessite quelque chose qui dépasse le périmètre défini par un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`), le dire explicitement — quel changement, quel(s) doc(s) amont concernés — plutôt que de l'absorber silencieusement.
 2. **Confirmer.** Demander à l'utilisateur si c'est une évolution volontaire ou s'il faut recadrer pour rester dans le périmètre initial.
 3. **Répercuter.** Si volontaire, mettre à jour le(s) doc(s) amont concernés en conséquence (pas seulement noter le changement dans le doc courant) — quel que soit à quelle étape on se trouve, la mise à jour remonte jusqu'au doc le plus en amont concerné (potentiellement jusqu'à `BRIEF.md`).
 4. **Vérifier l'impact sur `TASKS.md`.** Si le changement survient après que `dev-loop` a produit des tâches, signaler nommément les tâches potentiellement concernées (déjà faites ou à faire) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
@@ -67,7 +67,7 @@ Une fois `dev-memory` complété (ou si l'utilisateur arrête le pipeline avant 
 L'utilisateur n'a pas d'agent codant connecté à ce projet dans cette conversation — il devra transférer le travail vers Antigravity/Claude Code séparément.
 
 - Proposer de générer un **prompt de transfert** : un prompt structuré, prêt à coller dans l'agent codant, qui :
-  - pointe vers les fichiers du pipeline (`.idea-to-dev/CDC.md`, `.idea-to-dev/PRD.md`, `.idea-to-dev/SCREENS.md`, `.idea-to-dev/TASKS.md`, `.idea-to-dev/MEMORY.md`) comme sources de vérité — sans en recopier le contenu intégral ;
+  - pointe vers les fichiers du pipeline (`.idea-to-dev/CDC.md`, `.idea-to-dev/PRD.md`, `.idea-to-dev/SCREENS.md`, `.idea-to-dev/DESIGN.md`, `.idea-to-dev/TASKS.md`, `.idea-to-dev/MEMORY.md`) comme sources de vérité — sans en recopier le contenu intégral ;
   - inline en clair, de façon courte : l'état courant (depuis `MEMORY.md`), les contraintes/pièges actifs identifiés, et la ou les prochaines tâches de `TASKS.md` avec leur critère de vérification ;
   - indique à l'agent de lire `MEMORY.md` avant de commencer, et de le tenir à jour au fil du travail (cf. skill `dev-memory`).
 - Ne générer ce prompt que sur confirmation — ne pas le produire automatiquement en fin de pipeline.
@@ -83,7 +83,7 @@ Si le contexte n'est pas clair, demander à l'utilisateur plutôt que de suppose
 
 ## Vérification de conformité à tout moment — `mvp-check`
 
-`mvp-check` n'est pas une étape séquentielle du pipeline — il peut être invoqué à tout moment (pendant `dev-loop`, en fin de pipeline, ou sur demande explicite de l'utilisateur) pour vérifier que l'état réel du projet correspond au périmètre défini dans `BRIEF.md`/`PRD.md`/`SCREENS.md`, fonctionnalité par fonctionnalité et écran par écran (pas seulement le statut des tâches). Le proposer :
+`mvp-check` n'est pas une étape séquentielle du pipeline — il peut être invoqué à tout moment (pendant `dev-loop`, en fin de pipeline, ou sur demande explicite de l'utilisateur) pour vérifier que l'état réel du projet correspond au périmètre défini dans `BRIEF.md`/`PRD.md`/`SCREENS.md`/`DESIGN.md`, fonctionnalité par fonctionnalité et écran par écran (pas seulement le statut des tâches). Le proposer :
 
 - Une fois `TASKS.md` entièrement complété, avant de considérer le projet/feature livré.
 - Sur demande explicite de l'utilisateur à tout autre moment.

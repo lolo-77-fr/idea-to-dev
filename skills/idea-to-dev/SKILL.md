@@ -5,7 +5,7 @@ description: Orchestre le pipeline complet "idée → dev" en enchaînant automa
 
 # Idea to Dev — Orchestrateur de pipeline
 
-Chef d'orchestre des 8 skills du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `ui-design` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. `mvp-check` complète le pipeline mais n'est pas une étape séquentielle — il est invocable à tout moment (voir plus bas).
+Chef d'orchestre des 8 skills séquentiels du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `ui-design` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. Deux skills complètent le pipeline sans en faire partie séquentiellement : `mvp-check` (vérification de conformité, invocable à tout moment) et `ui-preview` (génération visuelle optionnelle via Stitch, entre `ui-design` et `cdc-technique`).
 
 ## Rôle
 
@@ -41,7 +41,7 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-desi
 2. Une fois le doc de l'étape produit et confirmé, **proposer explicitement de passer à l'étape suivante** plutôt que d'enchaîner automatiquement sans accord — l'utilisateur peut vouloir s'arrêter, faire une pause, ou retravailler l'étape courante.
 3. Si l'utilisateur décline ou veut s'arrêter, arrêter l'orchestration là — les docs déjà produits restent utilisables indépendamment.
 
-`ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels.
+`ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels. `ui-preview` est en revanche **facultatif** : le proposer une fois après `ui-design` (une seule fois, sans insister si l'utilisateur décline), sans jamais bloquer le passage à `cdc-technique` s'il n'est pas utilisé.
 
 `dev-loop` et `dev-memory` peuvent être traités comme un duo final : une fois `TASKS.md` créé par `dev-loop`, proposer `dev-memory` pour initialiser `MEMORY.md` avant de conclure.
 
@@ -89,6 +89,10 @@ Si le contexte n'est pas clair, demander à l'utilisateur plutôt que de suppose
 - Sur demande explicite de l'utilisateur à tout autre moment.
 
 Si `mvp-check` révèle un écart, appliquer la règle de répercussion des changements ci-dessus pour le traiter.
+
+## Rendu visuel optionnel — `ui-preview`
+
+`ui-preview` n'est pas une étape obligatoire : il permet, via Stitch, de générer un vrai rendu visuel des écrans (`SCREENS.md`) en respectant le design system (`DESIGN.md`), pour ceux qui veulent voir concrètement les écrans avant de passer au technique. À proposer une fois après `ui-design`, jamais imposé, et sans jamais retarder le passage à `cdc-technique` si l'utilisateur décline ou si Stitch n'est pas configuré. Si le rendu Stitch fait apparaître un écart avec `DESIGN.md`, appliquer la règle de répercussion des changements ci-dessus.
 
 ## Reprise d'un projet en cours
 

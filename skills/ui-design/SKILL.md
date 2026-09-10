@@ -110,5 +110,6 @@ Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du proje
 
 Une fois `DESIGN.md` créé et confirmé :
 
+- Signaler que `ui-preview` (optionnel, via Stitch) est disponible pour générer un vrai rendu visuel des écrans avant de passer au technique — sans l'imposer.
 - Proposer optionnellement de passer à `cdc-technique`, sans insister.
 - Ne pas générer de prompt pour la suite sauf demande explicite.

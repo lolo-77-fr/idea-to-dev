@@ -5,10 +5,10 @@ Pipeline de skills Claude pour aller d'une idée vague à un projet prêt à dé
 ## Pipeline
 
 ```
-brainstorm → product-brief → prd → ui-screens → ui-design → cdc-technique → dev-loop → dev-memory
+brainstorm → product-brief → prd → ui-screens → ui-design → (ui-preview) → cdc-technique → dev-loop → dev-memory
 ```
 
-`mvp-check` n'est pas une étape séquentielle : il est invocable à tout moment (fin de `dev-loop`, point d'étape intermédiaire, ou sur demande) pour vérifier la conformité de l'état réel du projet au périmètre défini.
+`mvp-check` et `gtm` ne sont pas des étapes séquentielles : `mvp-check` est invocable à tout moment (fin de `dev-loop`, point d'étape intermédiaire, ou sur demande) pour vérifier la conformité de l'état réel du projet au périmètre défini ; `gtm` s'invoque une fois le produit livré ou en fin de développement, en continuité du pipeline ou de façon autonome.
 
 | Skill | Rôle | Sortie |
 |---|---|---|
@@ -17,19 +17,38 @@ brainstorm → product-brief → prd → ui-screens → ui-design → cdc-techni
 | `prd` | Détaille le comportement fonctionnel de chaque brique (entrées/sorties, règles, statuts, cas limites) | `PRD.md` |
 | `ui-screens` | Détaille les écrans/vues du MVP : objectif, éléments affichés, actions, navigation (texte, pas de wireframe) — obligatoire, non-sautable | `SCREENS.md` |
 | `ui-design` | Définit le design system du MVP : tokens (couleurs, typographie, espacements, rayons, ombres) et description textuelle des composants clés | `DESIGN.md` |
+| `ui-preview` | Étape optionnelle : génère un rendu visuel réel des écrans via Stitch (Google Labs), en respectant `DESIGN.md` | — |
 | `cdc-technique` | Traduit le fonctionnel en choix techniques : stack, architecture, intégrations, découpage technique — clôturé par une checklist de complétude | `CDC.md` |
 | `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut | `TASKS.md` |
 | `dev-memory` | Mémoire de session : décisions en cours de route, pièges, debug actif, points de retour ; sert aussi de point de départ à la réconciliation d'un projet ayant évolué hors-pipeline | `MEMORY.md` |
 | `mvp-check` | Vérifie la conformité de l'état réel (code/tâches) au périmètre `BRIEF.md`/`PRD.md`/`SCREENS.md`, invocable à tout moment | — |
+| `gtm` | Priorise les canaux d'acquisition/vente d'un produit livré via la méthodologie Bullseye, en continuité du pipeline ou de façon autonome | — |
 | `idea-to-dev` | Orchestrateur — enchaîne les 8 skills séquentiels ci-dessus, gère reprise de projet existant et répercussion des changements de scope | — |
 
 Tous les documents produits sont stockés dans `.idea-to-dev/` à la racine du projet cible (ou `.idea-to-dev/[nom-feature]/` pour une nouvelle feature sur un projet déjà passé par le pipeline).
 
 ## Installation
 
-### Claude Code / Claude.ai (skills personnalisés)
+### Claude Code (plugin marketplace — recommandé)
 
-Copier le dossier du skill voulu (ex. `skills/brainstorm/`) dans votre dossier de skills (`~/.claude/skills/` ou équivalent selon votre installation). Chaque skill est un dossier autonome contenant un `SKILL.md`.
+Ce dépôt est une marketplace de plugins Claude Code contenant un seul plugin (`idea-to-dev`) qui embarque les 12 skills du pipeline. Installation :
+
+```
+/plugin marketplace add lolo-77-fr/idea-to-dev
+/plugin install idea-to-dev@idea-to-dev
+```
+
+Mise à jour ultérieure :
+
+```
+/plugin marketplace update idea-to-dev
+```
+
+(ou activer l'auto-update pour cette marketplace depuis `/plugin` → onglet Marketplaces).
+
+### Claude Code / Claude.ai (skills copiés manuellement)
+
+Alternative sans passer par le plugin : copier le dossier du skill voulu (ex. `skills/brainstorm/`) dans votre dossier de skills (`~/.claude/skills/` ou équivalent selon votre installation). Chaque skill est un dossier autonome contenant un `SKILL.md`.
 
 Pour installer tout le pipeline :
 

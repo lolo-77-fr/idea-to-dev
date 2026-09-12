@@ -1,5 +1,5 @@
 ---
-name: gtm-bullseye
+name: gtm
 description: "Aide à identifier et prioriser les canaux d'acquisition/vente pour un produit livré ou en fin de développement, en appliquant la méthodologie Bullseye (Traction, Weinberg & Mares) adaptée au produit réel via son contexte (BRIEF.md/PRD.md). Utiliser explicitement ce skill quand l'utilisateur demande comment lancer, vendre, trouver ses premiers clients, ou quel canal marketing/growth tester pour un projet — que ce soit en continuité du pipeline idea-to-dev (après dev-memory) ou de façon autonome sur n'importe quel produit/projet. Ne PAS déclencher si un canal est déjà validé et qu'il s'agit seulement de l'optimiser/scaler — dans ce cas c'est une simple exécution marketing, pas une recherche de canal."
 ---
 

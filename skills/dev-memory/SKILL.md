@@ -1,6 +1,6 @@
 ---
 name: dev-memory
-description: Maintient un fichier MEMORY.md qui consigne les décisions prises en cours de développement, les pièges/conventions spécifiques au projet, les tentatives de débogage en cours, et un pointeur d'état simple — pour éviter la perte de contexte et les hallucinations sur de longues conversations ou entre sessions. Utiliser ce skill quand une session de dev/débogage s'allonge, quand une décision dévie de ce qui était prévu dans CDC/PRD, quand l'utilisateur reprend un projet après une pause, ou demande "où on en était" / "qu'est-ce qu'on a déjà essayé". Sert aussi de point de départ à la réconciliation quand un projet a évolué hors-pipeline. Septième étape du pipeline idée → dev (accompagne dev-loop).
+description: Maintient un fichier MEMORY.md qui consigne les décisions prises en cours de développement, les pièges/conventions spécifiques au projet, les tentatives de débogage en cours, et un pointeur d'état simple — pour éviter la perte de contexte et les hallucinations sur de longues conversations ou entre sessions. Utiliser ce skill quand une session de dev/débogage s'allonge, quand une décision dévie de ce qui était prévu dans CDC/PRD, quand l'utilisateur reprend un projet après une pause, ou demande "où on en était" / "qu'est-ce qu'on a déjà essayé". Sert aussi de point de départ à la réconciliation quand un projet a évolué hors-pipeline. Huitième étape du pipeline idée → dev (accompagne dev-loop).
 ---
 
 # Dev Memory

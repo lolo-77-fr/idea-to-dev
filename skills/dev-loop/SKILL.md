@@ -1,6 +1,6 @@
 ---
 name: dev-loop
-description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Sixième étape du pipeline idée → dev (suit cdc-technique, précède/accompagne dev-memory).
+description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Septième étape du pipeline idée → dev (suit cdc-technique, précède/accompagne dev-memory).
 ---
 
 # Dev Loop

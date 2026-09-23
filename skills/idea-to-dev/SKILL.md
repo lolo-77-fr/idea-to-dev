@@ -5,7 +5,7 @@ description: Orchestre le pipeline complet "idée → dev" en enchaînant automa
 
 # Idea to Dev — Orchestrateur de pipeline
 
-Chef d'orchestre des 8 skills séquentiels du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `ui-design` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. Deux skills complètent le pipeline sans en faire partie séquentiellement : `mvp-check` (vérification de conformité, invocable à tout moment) et `ui-preview` (génération visuelle optionnelle via Stitch, entre `ui-design` et `cdc-technique`).
+Chef d'orchestre des 8 skills séquentiels du pipeline "idée → dev" : `brainstorm` → `product-brief` → `prd` → `ui-screens` → `ui-design` → `cdc-technique` → `dev-loop` → `dev-memory`. Enchaîne les étapes sur un même projet, sans relancer chaque skill manuellement. Deux skills complètent le pipeline sans en faire partie séquentiellement : `recette` (contrôle conformité/sécurité/incohérences/robustesse, à la fin de chaque brique et avant livraison) et `ui-preview` (génération visuelle optionnelle via Stitch, entre `ui-design` et `cdc-technique`).
 
 ## Rôle
 
@@ -29,7 +29,7 @@ Ce skill ne refait pas le travail des skills qu'il orchestre — il les invoque 
 2. **Détecter l'état du projet (dans le sous-dossier concerné si cas B).** Chercher les docs existants dans `.idea-to-dev/` (ou `.idea-to-dev/[nom-feature]/`) : `BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, `MEMORY.md`.
    - Aucun doc / dossier absent → démarrer à `brainstorm` (en tenant compte du cas A si applicable). Le dossier sera créé par le premier skill qui écrit un fichier.
    - Certains docs présents → reprendre à la première étape manquante (ex. `BRAINSTORM.md` + `BRIEF.md` présents → reprendre à `prd`).
-   - Tous présents → le projet est déjà passé par tout le pipeline ; informer l'utilisateur et demander ce qu'il souhaite faire (relancer une étape spécifique, passer directement à l'exécution dev via `dev-loop`/`dev-memory`, ou lancer un `mvp-check`).
+   - Tous présents → le projet est déjà passé par tout le pipeline ; informer l'utilisateur et demander ce qu'il souhaite faire (relancer une étape spécifique, passer directement à l'exécution dev via `dev-loop`/`dev-memory`, ou lancer une `recette`).
 
 3. **Annoncer le point de départ** brièvement avant de commencer, en mentionnant le cas de figure détecté si pertinent (ex. "Je vois `.idea-to-dev/BRAINSTORM.md` et `.idea-to-dev/BRIEF.md` — on reprend à `prd`." ou "Le projet a déjà du code mais pas de `.idea-to-dev/` — on démarre à `brainstorm` en tenant compte de l'existant.").
 
@@ -43,7 +43,7 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-desi
 
 `ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels. `ui-preview` est en revanche **facultatif** : le proposer une fois après `ui-design` (une seule fois, sans insister si l'utilisateur décline), sans jamais bloquer le passage à `cdc-technique` s'il n'est pas utilisé.
 
-`dev-loop` et `dev-memory` peuvent être traités comme un duo final : une fois `TASKS.md` créé par `dev-loop`, proposer `dev-memory` pour initialiser `MEMORY.md` avant de conclure.
+`dev-loop` et `dev-memory` forment un duo indissociable : une fois `TASKS.md` créé par `dev-loop`, `MEMORY.md` est **systématiquement** initialisé via `dev-memory` avant la première tâche de dev — ce n'est pas une proposition optionnelle. Voir "Pendant le dev" ci-dessous pour sa tenue.
 
 ## Répercussion des changements (règle transverse)
 
@@ -54,9 +54,10 @@ Mécanique, applicable par chaque skill quel qu'il soit (et rappelée dans chacu
 1. **Signaler.** Dès qu'un skill détecte qu'il introduit ou nécessite quelque chose qui dépasse le périmètre défini par un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`), le dire explicitement — quel changement, quel(s) doc(s) amont concernés — plutôt que de l'absorber silencieusement.
 2. **Confirmer.** Demander à l'utilisateur si c'est une évolution volontaire ou s'il faut recadrer pour rester dans le périmètre initial.
 3. **Répercuter.** Si volontaire, mettre à jour le(s) doc(s) amont concernés en conséquence (pas seulement noter le changement dans le doc courant) — quel que soit à quelle étape on se trouve, la mise à jour remonte jusqu'au doc le plus en amont concerné (potentiellement jusqu'à `BRIEF.md`).
-4. **Vérifier l'impact sur `TASKS.md`.** Si le changement survient après que `dev-loop` a produit des tâches, signaler nommément les tâches potentiellement concernées (déjà faites ou à faire) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
+4. **Consigner dans `MEMORY.md`** si le changement survient une fois `MEMORY.md` créé (donc pendant le dev) : une ligne dans "Décisions en cours de route" avec la tâche/brique concernée et l'état du doc amont (mis à jour / à mettre à jour). C'est cette trace qui permet à `recette` de reconnaître l'écart comme voulu.
+5. **Vérifier l'impact sur `TASKS.md`.** Si le changement survient après que `dev-loop` a produit des tâches, signaler nommément les tâches potentiellement concernées (déjà faites ou à faire) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
 
-Cette règle s'applique aussi bien pendant l'enchaînement séquentiel que sur un projet en reprise (cas B/C ci-dessus), et peut être déclenchée par un `mvp-check` qui révèle un écart.
+Cette règle s'applique aussi bien pendant l'enchaînement séquentiel que sur un projet en reprise (cas B/C ci-dessus), et peut être déclenchée par une `recette` qui révèle un écart.
 
 ## Fin de pipeline — adapter selon le contexte
 
@@ -69,7 +70,8 @@ L'utilisateur n'a pas d'agent codant connecté à ce projet dans cette conversat
 - Proposer de générer un **prompt de transfert** : un prompt structuré, prêt à coller dans l'agent codant, qui :
   - pointe vers les fichiers du pipeline (`.idea-to-dev/CDC.md`, `.idea-to-dev/PRD.md`, `.idea-to-dev/SCREENS.md`, `.idea-to-dev/DESIGN.md`, `.idea-to-dev/TASKS.md`, `.idea-to-dev/MEMORY.md`) comme sources de vérité — sans en recopier le contenu intégral ;
   - inline en clair, de façon courte : l'état courant (depuis `MEMORY.md`), les contraintes/pièges actifs identifiés, et la ou les prochaines tâches de `TASKS.md` avec leur critère de vérification ;
-  - indique à l'agent de lire `MEMORY.md` avant de commencer, et de le tenir à jour au fil du travail (cf. skill `dev-memory`).
+  - indique à l'agent de lire `MEMORY.md` avant de commencer, et de le tenir à jour au fil du travail — en particulier toute déviation par rapport à `CDC.md`/`TASKS.md` (cf. skills `dev-loop` et `dev-memory`) ;
+  - indique de proposer une recette (skill `recette`) à la fin de chaque brique et avant livraison.
 - Ne générer ce prompt que sur confirmation — ne pas le produire automatiquement en fin de pipeline.
 
 ### Contexte agent codant (Claude Code / Antigravity) avec accès au code
@@ -77,18 +79,29 @@ L'utilisateur n'a pas d'agent codant connecté à ce projet dans cette conversat
 L'utilisateur a lancé ce pipeline directement dans son environnement de dev, avec accès aux fichiers du projet.
 
 - Le développement est la suite logique directe — pas besoin de prompt de transfert.
-- Proposer d'enchaîner sur le développement : lire `TASKS.md` et `MEMORY.md`, et commencer la première tâche non faite, en respectant les conventions du skill `dev-loop` (mise à jour des statuts) et `dev-memory` (consigner décisions/pièges au fil de l'eau).
+- Proposer d'enchaîner sur le développement : lire `MEMORY.md` puis `TASKS.md`, et commencer la première tâche non faite, en respectant les conventions du skill `dev-loop` (mise à jour des statuts, recette de brique) et `dev-memory` (consigner décisions/pièges au fil de l'eau — voir "Pendant le dev").
 
 Si le contexte n'est pas clair, demander à l'utilisateur plutôt que de supposer.
 
-## Vérification de conformité à tout moment — `mvp-check`
+## Pendant le dev — tenue de `MEMORY.md`
 
-`mvp-check` n'est pas une étape séquentielle du pipeline — il peut être invoqué à tout moment (pendant `dev-loop`, en fin de pipeline, ou sur demande explicite de l'utilisateur) pour vérifier que l'état réel du projet correspond au périmètre défini dans `BRIEF.md`/`PRD.md`/`SCREENS.md`/`DESIGN.md`, fonctionnalité par fonctionnalité et écran par écran (pas seulement le statut des tâches). Le proposer :
+Une fois le dev lancé, le code s'écarte inévitablement du `CDC.md` et du `TASKS.md` initiaux. Ce n'est pas un problème tant que chaque écart est **tracé** : `MEMORY.md` est le registre de ces écarts, et `recette` s'en sert pour distinguer une déviation décidée d'une anomalie.
 
-- Une fois `TASKS.md` entièrement complété, avant de considérer le projet/feature livré.
+L'orchestrateur veille donc à ce que, pendant toute la phase de dev :
+
+- `MEMORY.md` soit lu en début de session (avant `TASKS.md`) ;
+- chaque déviation (tâche réalisée autrement que prévu, tâche ajoutée/supprimée pour une raison de fond, choix technique ou comportement différent du CDC/PRD/SCREENS/DESIGN) y soit consignée **au moment où elle est décidée**, pas en fin de session — liste détaillée dans `dev-loop`, format dans `dev-memory` ;
+- `MEMORY.md` soit à jour avant toute pause, et avant chaque `recette`.
+
+## Recette — à la fin de chaque brique et avant livraison
+
+`recette` n'est pas une étape séquentielle et ne s'utilise pas en continu (le code bouge trop pendant le dev pour qu'un contrôle permanent soit utile). La proposer :
+
+- **Recette de brique** : quand toutes les tâches d'une brique de `TASKS.md` sont `[x]`, avant d'attaquer la brique suivante.
+- **Recette complète** : quand toutes les tâches sont faites, avant de considérer le projet/feature livré.
 - Sur demande explicite de l'utilisateur à tout autre moment.
 
-Si `mvp-check` révèle un écart, appliquer la règle de répercussion des changements ci-dessus pour le traiter.
+La recette confronte le code aux docs amont **et** à `MEMORY.md`. Les anomalies retenues deviennent des tâches correctives dans `TASKS.md` ; un écart qui révèle un doc amont faux ou incomplet passe par la règle de répercussion des changements ci-dessus.
 
 ## Rendu visuel optionnel — `ui-preview`
 
@@ -100,4 +113,5 @@ Si l'utilisateur invoque ce skill sur un projet où `.idea-to-dev/TASKS.md` et `
 
 - Vérifier d'abord si une réconciliation (cas C) est nécessaire avant de repartir — voir Démarrage.
 - Lire `.idea-to-dev/MEMORY.md` puis `.idea-to-dev/TASKS.md` pour le contexte.
+- Si `.idea-to-dev/RECETTE.md` existe, relever les anomalies encore ouvertes et leurs tâches correctives.
 - Résumer brièvement l'état courant et proposer de continuer le développement (pas de repasser par brainstorm/brief/etc., qui sont déjà faits) — sauf si l'utilisateur signale explicitement vouloir revoir une étape antérieure (ex. un changement de périmètre nécessitant de retoucher le PRD, à traiter via la règle de répercussion des changements).

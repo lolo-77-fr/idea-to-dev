@@ -8,7 +8,11 @@ Pipeline de skills Claude pour aller d'une idée vague à un projet prêt à dé
 brainstorm → product-brief → prd → ui-screens → ui-design → (ui-preview) → cdc-technique → dev-loop → dev-memory
 ```
 
-`mvp-check` et `gtm` ne sont pas des étapes séquentielles : `mvp-check` est invocable à tout moment (fin de `dev-loop`, point d'étape intermédiaire, ou sur demande) pour vérifier la conformité de l'état réel du projet au périmètre défini ; `gtm` s'invoque une fois le produit livré ou en fin de développement, en continuité du pipeline ou de façon autonome.
+Trois skills hors séquence complètent le pipeline :
+
+- `recette` — contrôle du code à chaque jalon : recette de brique (quand toutes les tâches d'une brique sont faites) et recette complète (avant livraison).
+- `ui-preview` — rendu visuel optionnel des écrans via Stitch, entre `ui-design` et `cdc-technique`.
+- `gtm` — s'invoque une fois le produit livré ou en fin de développement, en continuité du pipeline ou de façon autonome.
 
 | Skill | Rôle | Sortie |
 |---|---|---|
@@ -19,9 +23,9 @@ brainstorm → product-brief → prd → ui-screens → ui-design → (ui-previe
 | `ui-design` | Définit le design system du MVP : tokens (couleurs, typographie, espacements, rayons, ombres) et description textuelle des composants clés | `DESIGN.md` |
 | `ui-preview` | Étape optionnelle : génère un rendu visuel réel des écrans via Stitch (Google Labs), en respectant `DESIGN.md` | — |
 | `cdc-technique` | Traduit le fonctionnel en choix techniques : stack, architecture, intégrations, découpage technique — clôturé par une checklist de complétude | `CDC.md` |
-| `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut | `TASKS.md` |
-| `dev-memory` | Mémoire de session : décisions en cours de route, pièges, debug actif, points de retour ; sert aussi de point de départ à la réconciliation d'un projet ayant évolué hors-pipeline | `MEMORY.md` |
-| `mvp-check` | Vérifie la conformité de l'état réel (code/tâches) au périmètre `BRIEF.md`/`PRD.md`/`SCREENS.md`, invocable à tout moment | — |
+| `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut, impose la trace des déviations dans `MEMORY.md` | `TASKS.md` |
+| `dev-memory` | Mémoire du dev : décisions et déviations vs CDC/TASKS, pièges, debug actif, points de retour ; référence de la recette pour distinguer déviation voulue et anomalie ; point de départ de la réconciliation d'un projet ayant évolué hors-pipeline | `MEMORY.md` |
+| `recette` | Contrôle conformité (PRD/SCREENS/DESIGN), sécurité adaptée à la stack, incohérences (code ↔ docs ↔ `MEMORY.md`, code interne) et robustesse ; anomalies → tâches correctives | `RECETTE.md` |
 | `gtm` | Priorise les canaux d'acquisition/vente d'un produit livré via la méthodologie Bullseye, en continuité du pipeline ou de façon autonome | — |
 | `idea-to-dev` | Orchestrateur — enchaîne les 8 skills séquentiels ci-dessus, gère reprise de projet existant et répercussion des changements de scope | — |
 
@@ -78,7 +82,8 @@ Chaque skill lit/écrit ses documents dans `.idea-to-dev/` à la racine du proje
 ├── DESIGN.md
 ├── CDC.md
 ├── TASKS.md
-└── MEMORY.md
+├── MEMORY.md
+└── RECETTE.md
 ```
 
 - **Avec accès au système de fichiers** (Claude Code, Antigravity) : le dossier est créé/lu automatiquement.

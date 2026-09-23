@@ -1,31 +1,33 @@
 ---
 name: dev-memory
-description: Maintient un fichier MEMORY.md qui consigne les décisions prises en cours de développement, les pièges/conventions spécifiques au projet, les tentatives de débogage en cours, et un pointeur d'état simple — pour éviter la perte de contexte et les hallucinations sur de longues conversations ou entre sessions. Utiliser ce skill quand une session de dev/débogage s'allonge, quand une décision dévie de ce qui était prévu dans CDC/PRD, quand l'utilisateur reprend un projet après une pause, ou demande "où on en était" / "qu'est-ce qu'on a déjà essayé". Sert aussi de point de départ à la réconciliation quand un projet a évolué hors-pipeline. Huitième étape du pipeline idée → dev (accompagne dev-loop).
+description: Maintient un fichier MEMORY.md qui consigne les décisions prises en cours de développement, les pièges/conventions spécifiques au projet, les tentatives de débogage en cours, et un pointeur d'état simple — pour éviter la perte de contexte et les hallucinations sur de longues conversations ou entre sessions. Utiliser ce skill quand une session de dev/débogage s'allonge, quand une décision dévie de ce qui était prévu dans CDC/PRD, quand l'utilisateur reprend un projet après une pause, ou demande "où on en était" / "qu'est-ce qu'on a déjà essayé". Sert aussi de point de départ à la réconciliation quand un projet a évolué hors-pipeline. Huitième étape du pipeline idée → dev (initialisé en fin de dev-loop, tenu à jour pendant tout le dev, lu par recette).
 ---
 
 # Dev Memory
 
-Septième maillon du pipeline "idée → dev". Maintient `MEMORY.md`, un fichier de **mémoire vive du projet** : ce qui ne figure dans aucun autre doc (CDC/PRD/SCREENS figés une fois validés, TASKS.md = liste de tâches) mais qui est essentiel pour qu'un agent (ou Claude dans une session future) ne perde pas le fil.
+Huitième maillon du pipeline "idée → dev". Maintient `MEMORY.md`, un fichier de **mémoire vive du projet** : ce qui ne figure dans aucun autre doc (CDC/PRD/SCREENS figés une fois validés, TASKS.md = liste de tâches) mais qui est essentiel pour qu'un agent (ou Claude dans une session future) ne perde pas le fil.
 
 ## Pourquoi ce fichier
 
-Deux problèmes concrets qu'il adresse :
+Trois problèmes concrets qu'il adresse :
 
 1. **Dilution du contexte sur une longue conversation** (ex. session de debug qui s'étire) — l'agent finit par oublier ce qui a déjà été essayé, retente les mêmes pistes, ou perd de vue une contrainte mentionnée 50 messages plus tôt.
 2. **Perte de contexte entre sessions** — à la reprise, un agent sans `MEMORY.md` peut re-débattre une décision déjà tranchée (et documentée nulle part d'autre), ou ignorer un piège déjà identifié (ex. "le node Anthropic natif ne marche pas en v2.3.4").
+3. **Distinguer une déviation volontaire d'une erreur** — le code finit toujours par s'écarter un peu du `CDC.md`/`TASKS.md` initial. Le skill `recette` lit `MEMORY.md` pour savoir quels écarts ont été décidés (et ne sont donc pas des anomalies) : une déviation non consignée ici sera remontée comme anomalie.
 
-`MEMORY.md` n'est pas un journal exhaustif — c'est un filet de sécurité contre la répétition et l'oubli.
+`MEMORY.md` n'est pas un journal exhaustif — c'est un filet de sécurité contre la répétition, l'oubli et les déviations non tracées.
 
 ## Répercussion des changements (règle transverse) et réconciliation
 
 `MEMORY.md` est alimenté par le pipeline (ce skill, `dev-loop`) au fil de l'eau — mais tout ce qui change le projet ne passe pas forcément par le pipeline (correctifs, ajouts faits directement dans le code, hors session de dev suivie). Dans ce cas, `MEMORY.md` prend du retard silencieusement.
 
-- **Une décision dévie de ce qui était prévu** (CDC, PRD, SCREENS, ou choix antérieur) — la noter ici immédiatement, et signaler si le doc amont correspondant devrait aussi être mis à jour (cf. règle détaillée dans l'orchestrateur `idea-to-dev`) plutôt que de laisser l'écart uniquement dans `MEMORY.md`.
+- **Une décision dévie de ce qui était prévu** (CDC, PRD, SCREENS, DESIGN, TASKS, ou choix antérieur) — la noter ici immédiatement, et signaler si le doc amont correspondant devrait aussi être mis à jour (cf. règle détaillée dans l'orchestrateur `idea-to-dev`) plutôt que de laisser l'écart uniquement dans `MEMORY.md`.
 - **Réconciliation** : quand l'utilisateur (ou l'orchestrateur) signale que le projet a évolué hors-pipeline depuis la dernière mise à jour de `MEMORY.md`, ce skill est le point d'atterrissage — scanner le code si l'accès est disponible (façon `/init`) ou recueillir les changements déclarés par l'utilisateur sinon, puis mettre à jour "État courant", "Décisions en cours de route" et "Pièges & conventions" en conséquence avant de considérer l'état du projet fiable.
 
 ## Quand l'utiliser / mettre à jour
 
-- **Une décision dévie de ce qui était prévu** (CDC, PRD, ou choix antérieur) — noter quoi et pourquoi, immédiatement, pas en fin de session.
+- **Une décision dévie de ce qui était prévu** (CDC, PRD, SCREENS, DESIGN, TASKS, ou choix antérieur) — noter quoi et pourquoi, immédiatement, pas en fin de session. `dev-loop` liste les cas qui doivent être consignés (section "Tenue de MEMORY.md pendant le dev").
+- **Après une recette** — reporter l'état de la recette, les risques acceptés et les déviations confirmées volontaires (cf. skill `recette`), pour qu'une recette suivante ne les remonte pas à nouveau.
 - **Un piège/contrainte non documenté ailleurs est découvert** (ex. comportement inattendu d'un outil, limite d'API) — le noter dès qu'il est identifié.
 - **Une session de debug s'allonge** (plusieurs échanges sur le même problème) — consigner les pistes essayées et leur résultat au fur et à mesure, pas seulement à la fin.
 - **Avant une modification risquée** (refacto, changement de logique sur du code qui fonctionne) — noter l'état "avant" pour faciliter un retour en arrière.
@@ -47,7 +49,7 @@ Dernière mise à jour : [date]
 
 ## Décisions en cours de route
 
-- **[Date/contexte court]** — [Ce qui a été décidé/changé vs prévu initialement] — [pourquoi]
+- **[Date] — [T-XX / brique concernée]** — [Ce qui a été décidé/changé vs prévu initialement] — [pourquoi] — Doc amont : [`CDC.md` § X mis à jour / à mettre à jour / aucun]
 
 ## Pièges & conventions du projet
 
@@ -71,7 +73,7 @@ Omettre les sections "Debug en cours" et "Points de retour" quand elles ne sont 
 
 - **Pas de redondance avec TASKS.md** — `MEMORY.md` ne liste pas les tâches, il référence l'état courant (ex. "tâche en cours : T-18") sans dupliquer le détail.
 - **Nettoyer le "Debug en cours" une fois résolu.** Quand un bug est résolu, retirer la section "Debug en cours" correspondante et, si la résolution constitue une décision/piège notable pour la suite, en garder une trace condensée (une ligne) dans "Décisions" ou "Pièges & conventions".
-- **Garder "Décisions" synthétique.** Une ligne par décision (date/contexte court + quoi + pourquoi). Si le fichier devient trop long avec le temps, proposer à l'utilisateur d'archiver les décisions anciennes et non pertinentes pour la suite plutôt que de les laisser s'accumuler indéfiniment.
+- **Garder "Décisions" synthétique.** Une ligne par décision (date + tâche/brique + quoi + pourquoi + état du doc amont). La référence à la tâche/brique et l'état du doc amont ne sont pas optionnels : c'est ce qui permet à `recette` de rattacher un écart constaté dans le code à une décision, et de repérer les docs amont restés en retard. Si le fichier devient trop long avec le temps, proposer à l'utilisateur d'archiver les décisions anciennes et non pertinentes pour la suite plutôt que de les laisser s'accumuler indéfiniment.
 - **Lecture systématique en début de session** sur un projet existant — avant de répondre à une demande de reprise ("où on en était", "continue", "qu'est-ce qu'on a déjà essayé"), lire `MEMORY.md` s'il existe.
 
 ## Emplacement du fichier
@@ -83,4 +85,4 @@ Omettre les sections "Debug en cours" et "Points de retour" quand elles ne sont 
 
 ## Détection de contexte
 
-Comme les autres skills du pipeline, vérifier la présence de `CDC.md`/`PRD.md`/`SCREENS.md`/`TASKS.md` (dans `.idea-to-dev/`) pour situer le projet, mais `MEMORY.md` peut exister et être utile même en l'absence des autres docs (ex. petit projet sans CDC formel, mais avec une session de debug qui s'allonge).
+Comme les autres skills du pipeline, vérifier la présence de `CDC.md`/`PRD.md`/`SCREENS.md`/`DESIGN.md`/`TASKS.md`/`RECETTE.md` (dans `.idea-to-dev/`) pour situer le projet, mais `MEMORY.md` peut exister et être utile même en l'absence des autres docs (ex. petit projet sans CDC formel, mais avec une session de debug qui s'allonge).

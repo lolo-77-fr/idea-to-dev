@@ -1,11 +1,11 @@
 ---
 name: dev-loop
-description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Septième étape du pipeline idée → dev (suit cdc-technique, précède/accompagne dev-memory).
+description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Septième étape du pipeline idée → dev (suit cdc-technique, fonctionne avec dev-memory ; déclenche recette à la fin de chaque brique).
 ---
 
 # Dev Loop
 
-Sixième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-tâches exécutables** (2-5 minutes chacune), avec chemins de fichiers exacts et critères de vérification — et maintient leur statut au fil du développement.
+Septième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-tâches exécutables** (2-5 minutes chacune), avec chemins de fichiers exacts et critères de vérification — et maintient leur statut au fil du développement.
 
 ## Posture
 
@@ -16,7 +16,7 @@ Sixième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-t�
 
 ## Répercussion des changements (règle transverse)
 
-Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `CDC.md`) — nouveau besoin, correction de comportement, ajustement de scope —, ne pas se contenter d'ajouter une tâche isolée : signaler explicitement quel doc amont est concerné, et proposer sa mise à jour une fois confirmé (cf. règle détaillée dans l'orchestrateur `idea-to-dev`). Si ce changement rend une ou plusieurs tâches déjà faites (`[x]`) potentiellement obsolètes ou incomplètes, les signaler nommément à l'utilisateur — sans les repasser automatiquement à `[ ]` ou `[~]`, c'est à lui de trancher.
+Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`) — nouveau besoin, correction de comportement, ajustement de scope —, ne pas se contenter d'ajouter une tâche isolée : le consigner immédiatement dans `MEMORY.md` (voir "Tenue de MEMORY.md pendant le dev"), signaler explicitement quel doc amont est concerné, et proposer sa mise à jour une fois confirmé (cf. règle détaillée dans l'orchestrateur `idea-to-dev`). Si ce changement rend une ou plusieurs tâches déjà faites (`[x]`) potentiellement obsolètes ou incomplètes, les signaler nommément à l'utilisateur — sans les repasser automatiquement à `[ ]` ou `[~]`, c'est à lui de trancher.
 
 ## Déroulé — création initiale de TASKS.md
 
@@ -39,6 +39,8 @@ Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCR
    - un ordre/dépendance qui pourrait être discuté (ex. deux tâches qui pourraient être inversées ou fusionnées).
 
    S'il n'y a rien de particulier à signaler sur une brique, le dire brièvement plutôt que de demander une validation creuse. L'objectif est que l'utilisateur ait quelque chose de concret à challenger, pas juste à approuver passivement.
+
+6. **Initialiser `MEMORY.md`.** Une fois `TASKS.md` validé, et avant la première tâche de dev, créer `MEMORY.md` via `dev-memory` (état courant + hypothèses techniques non vérifiées repérées à l'étape 5). Ce n'est pas optionnel : la recette s'appuie sur `MEMORY.md` pour distinguer une déviation volontaire d'une anomalie.
 
 ## Format de TASKS.md
 
@@ -72,6 +74,18 @@ Quand l'utilisateur revient sur le projet :
 - **Mettre à jour les statuts** au fur et à mesure que les tâches sont complétées (sur indication de l'utilisateur, ou en le déduisant si le contexte de la conversation le montre clairement — dans ce cas, confirmer avec l'utilisateur avant de marquer comme fait).
 - **Si une tâche s'avère mal calibrée** (trop grosse, dépendance oubliée, plus pertinente) en cours de réalisation, l'ajuster directement dans `TASKS.md` (la scinder, la reformuler, ajouter une tâche manquante) plutôt que de laisser le fichier devenir obsolète.
 - **Si de nouvelles tâches émergent** naturellement pendant le développement (besoin non anticipé au CDC), les ajouter à la suite de la brique concernée, ou dans une section "Tâches ajoutées en cours de dev" si elles ne rattachent à aucune brique existante — et vérifier si ce besoin doit aussi remonter au CDC/PRD (cf. règle de répercussion des changements ci-dessus).
+- **Brique terminée → recette de brique.** Quand toutes les tâches d'une brique sont `[x]`, proposer une recette de brique (skill `recette`) avant d'attaquer la brique suivante. Les anomalies retenues reviennent sous forme de tâches correctives dans `TASKS.md`.
+
+## Tenue de MEMORY.md pendant le dev
+
+`TASKS.md` dit ce qui était prévu ; `MEMORY.md` dit ce qui a changé et pourquoi. Sans cette trace, une déviation volontaire est indiscernable d'une erreur — et la recette la remontera comme anomalie. Pendant l'exécution des tâches, **consigner dans `MEMORY.md` au moment où ça arrive** (format : cf. `dev-memory`, section "Décisions en cours de route") :
+
+- une tâche réalisée **autrement que prévu** (autre approche, autre fichier, autre librairie) ;
+- une tâche **scindée, fusionnée, supprimée ou ajoutée** pour une raison qui n'est pas purement de granularité ;
+- un **choix technique qui dévie du `CDC.md`** ou un comportement qui dévie du `PRD.md`/`SCREENS.md`/`DESIGN.md` ;
+- un **piège ou une convention** découvert en codant.
+
+Chaque entrée référence la tâche/brique concernée et indique si le doc amont a été mis à jour. Un simple ajustement de formulation ou de granularité d'une tâche n'a pas besoin d'y figurer.
 
 ## Emplacement des fichiers
 
@@ -82,6 +96,6 @@ Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du proje
 
 ## Fin de session
 
-- Proposer optionnellement `dev-memory` pour consigner le contexte de session si pertinent (ex. fin de journée de dev, reprise prévue plus tard).
-- Proposer optionnellement `mvp-check` si toutes les tâches connues sont faites, pour vérifier la conformité au périmètre avant de considérer le projet/feature livré.
+- Vérifier que `MEMORY.md` est à jour (état courant, décisions et pièges de la session) — le mettre à jour via `dev-memory` si ce n'est pas le cas, surtout avant une pause ou une reprise prévue plus tard.
+- Si une brique vient d'être terminée, proposer une recette de brique ; si toutes les tâches connues sont faites, proposer une recette complète (skill `recette`) avant de considérer le projet/feature livré.
 - Pas de génération de prompt pour la suite sauf demande explicite.

@@ -31,7 +31,7 @@ Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCR
 
 3. **Ordonner selon les dépendances.** Respecter l'ordre logique issu du CDC (les fondations d'abord). Si des tâches sont indépendantes entre elles, le signaler (elles pourraient être traitées en parallèle par des sous-agents si l'outil de dev le permet).
 
-4. **Critères de vérification.** Pour chaque tâche, formuler un critère simple et observable de "c'est fait" (ex. "la table existe et accepte une insertion test", "le webhook répond 200 sur un appel de test", "le composant s'affiche sans erreur console").
+4. **Critères de vérification.** Pour chaque tâche, formuler un critère simple et observable de "c'est fait" (ex. "la table existe et accepte une insertion test", "le webhook répond 200 sur un appel de test", "le composant s'affiche sans erreur console"). Quand c'est possible, l'exprimer avec une commande de la section "Commandes & vérification" du `CDC.md` (ex. "`npm test -- import` passe"), pour que la vérification soit exécutable et pas seulement déclarative.
 
    **Rattacher aux critères d'acceptation.** Quand la vérification d'une tâche prouve un critère d'acceptation du PRD, citer son identifiant (ex. "Vérification : un draft généré apparaît en statut `à valider` — F-02.1"). Pour chaque brique `B-XX`, chaque critère `F-XX.Y` des briques fonctionnelles qu'elle couvre doit être prouvé par au moins une tâche. Signaler à l'utilisateur les critères qui ne le sont pas : soit une tâche manque, soit le critère ne pourra être vérifié qu'à la recette — le dire explicitement.
 
@@ -76,11 +76,53 @@ Les numéros `T-XX` sont stables et continus sur tout le fichier : une tâche aj
 
 Quand l'utilisateur revient sur le projet :
 
-- **Lire `TASKS.md` existant** pour voir l'état d'avancement avant toute action.
+- **Lire `MEMORY.md` puis `TASKS.md`** pour récupérer le contexte et l'état d'avancement avant toute action (dans un agent codant, suivre la "Boucle d'exécution" ci-dessous).
 - **Mettre à jour les statuts** au fur et à mesure que les tâches sont complétées (sur indication de l'utilisateur, ou en le déduisant si le contexte de la conversation le montre clairement — dans ce cas, confirmer avec l'utilisateur avant de marquer comme fait).
 - **Si une tâche s'avère mal calibrée** (trop grosse, dépendance oubliée, plus pertinente) en cours de réalisation, l'ajuster directement dans `TASKS.md` (la scinder, la reformuler, ajouter une tâche manquante) plutôt que de laisser le fichier devenir obsolète.
 - **Si de nouvelles tâches émergent** naturellement pendant le développement (besoin non anticipé au CDC), les ajouter à la suite de la brique concernée, ou dans une section "Tâches ajoutées en cours de dev" si elles ne rattachent à aucune brique existante — et vérifier si ce besoin doit aussi remonter au CDC/PRD (cf. règle de répercussion des changements ci-dessus).
 - **Brique terminée → recette de brique.** Quand toutes les tâches d'une brique sont `[x]`, proposer une recette de brique (skill `recette`) avant d'attaquer la brique suivante. Les anomalies retenues reviennent sous forme de tâches correctives dans `TASKS.md`.
+
+## Boucle d'exécution (agent codant avec accès au code)
+
+Quand le développement se fait dans cette conversation (Claude Code, Antigravity...), exécuter les tâches selon cette boucle — c'est ce qui garantit qu'une tâche `[x]` a réellement été vérifiée et que `TASKS.md`/`MEMORY.md` restent fiables d'une session à l'autre.
+
+**En début de session**
+
+1. Lire `MEMORY.md`, puis `TASKS.md`, puis la section "Commandes & vérification" de `CDC.md`.
+2. Vérifier que le fichier d'instructions du projet pointe vers ces docs (voir "Lien avec le fichier d'instructions du projet" ci-dessous) ; sinon, le proposer une fois.
+3. Choisir la tâche : une tâche `[~]` en cours s'il y en a une, sinon la première `[ ]` dont les dépendances sont faites.
+4. Convenir du **rythme** avec l'utilisateur, une fois par session : tâche par tâche (arrêt après chaque tâche) ou brique par brique (enchaîner les tâches d'une brique `B-XX`, arrêt en fin de brique). Par défaut : brique par brique.
+
+**Pour chaque tâche**
+
+1. Passer la tâche en `[~]`.
+2. Implémenter **uniquement ce que la tâche demande**. Un besoin hors tâche découvert en route devient une nouvelle tâche (et, si c'est une déviation, une entrée `MEMORY.md`) — pas un ajout silencieux.
+3. **Lancer la vérification** de la tâche : la commande de test/lint/lancement du CDC, ou le constat observable décrit. Si la vérification ne peut pas être faite par l'agent (contrôle visuel, service externe inaccessible), le dire et demander à l'utilisateur de la faire plutôt que de la supposer réussie.
+4. **Vérification OK** → passer la tâche en `[x]`, mettre à jour "Dernière mise à jour" de `TASKS.md`, et proposer un commit (message préfixé par l'identifiant, ex. `T-12: ...`) si le projet est versionné — sauf si l'utilisateur a indiqué une autre convention de commit.
+5. **Vérification KO** → corriger et relancer. Après deux tentatives infructueuses sur la même cause, arrêter d'essayer à l'aveugle : consigner le problème dans la section "Debug en cours" de `MEMORY.md` (pistes essayées et résultats) et faire le point avec l'utilisateur.
+6. Toute déviation par rapport à ce que prévoyait la tâche ou le CDC → `MEMORY.md` immédiatement (voir section suivante).
+
+**En fin de brique** : toutes les tâches de la brique `[x]` → proposer une recette de brique (skill `recette`) avant de passer à la suivante.
+
+Ne jamais passer une tâche en `[x]` sans que sa vérification ait été lancée et réussie, ou explicitement confirmée par l'utilisateur.
+
+**En chat sans accès au code**, cette boucle ne s'applique pas telle quelle : l'utilisateur exécute les tâches dans son agent codant. Se limiter à mettre à jour les statuts sur ses indications et à rappeler de consigner les déviations dans `MEMORY.md`.
+
+## Lien avec le fichier d'instructions du projet
+
+Pour que n'importe quelle session future — même sans que ce skill soit déclenché — reparte des bons docs, proposer (une fois, sur confirmation, car c'est un fichier du projet de l'utilisateur) d'ajouter ce bloc au fichier d'instructions lu automatiquement par l'agent codant : `CLAUDE.md` pour Claude Code, `AGENTS.md` pour Antigravity et les agents compatibles (dans les deux si les deux existent). L'ajouter à la fin du fichier existant, ou créer le fichier s'il n'existe pas. Adapter le chemin si les docs sont dans un sous-dossier de feature (`.idea-to-dev/[nom-feature]/`).
+
+```markdown
+## Pipeline idea-to-dev
+
+Les specs et le suivi de ce projet sont dans `.idea-to-dev/`.
+
+- Avant toute tâche de dev : lire `.idea-to-dev/MEMORY.md`, puis `.idea-to-dev/TASKS.md`.
+- Commandes (tests, lint, build) et stratégie de test : `.idea-to-dev/CDC.md`, section "Commandes & vérification".
+- Une tâche n'est `[x]` qu'une fois sa vérification lancée et réussie.
+- Toute déviation par rapport à `CDC.md` ou `TASKS.md` est consignée immédiatement dans `MEMORY.md` (identifiants concernés, état du doc amont).
+- Fin d'une brique `B-XX` : proposer une recette de brique (skill `recette`).
+```
 
 ## Tenue de MEMORY.md pendant le dev
 

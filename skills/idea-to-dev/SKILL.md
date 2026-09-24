@@ -89,6 +89,8 @@ L'utilisateur n'a pas d'agent codant connecté à ce projet dans cette conversat
   - pointe vers les fichiers du pipeline (`.idea-to-dev/CDC.md`, `.idea-to-dev/PRD.md`, `.idea-to-dev/SCREENS.md`, `.idea-to-dev/DESIGN.md`, `.idea-to-dev/TASKS.md`, `.idea-to-dev/MEMORY.md`) comme sources de vérité — sans en recopier le contenu intégral ;
   - inline en clair, de façon courte : l'état courant (depuis `MEMORY.md`), les contraintes/pièges actifs identifiés, et la ou les prochaines tâches de `TASKS.md` avec leur critère de vérification ;
   - indique à l'agent de lire `MEMORY.md` avant de commencer, et de le tenir à jour au fil du travail — en particulier toute déviation par rapport à `CDC.md`/`TASKS.md` (cf. skills `dev-loop` et `dev-memory`) ;
+  - indique de suivre la "Boucle d'exécution" de `dev-loop` (vérification lancée avant de passer une tâche en `[x]`, commandes dans la section "Commandes & vérification" de `CDC.md`) ;
+  - indique d'ajouter au `CLAUDE.md`/`AGENTS.md` du projet le bloc de lien vers `.idea-to-dev/` (inclure le bloc lui-même dans le prompt, cf. `dev-loop`) ;
   - indique de proposer une recette (skill `recette`) à la fin de chaque brique et avant livraison.
 - Ne générer ce prompt que sur confirmation — ne pas le produire automatiquement en fin de pipeline.
 
@@ -97,7 +99,8 @@ L'utilisateur n'a pas d'agent codant connecté à ce projet dans cette conversat
 L'utilisateur a lancé ce pipeline directement dans son environnement de dev, avec accès aux fichiers du projet.
 
 - Le développement est la suite logique directe — pas besoin de prompt de transfert.
-- Proposer d'enchaîner sur le développement : lire `MEMORY.md` puis `TASKS.md`, et commencer la première tâche non faite, en respectant les conventions du skill `dev-loop` (mise à jour des statuts, recette de brique) et `dev-memory` (consigner décisions/pièges au fil de l'eau — voir "Pendant le dev").
+- Proposer d'ajouter au `CLAUDE.md`/`AGENTS.md` du projet le bloc qui pointe vers `.idea-to-dev/` (modèle et règles dans `dev-loop`, section "Lien avec le fichier d'instructions du projet"), pour que les sessions futures repartent des bons docs même sans invoquer le pipeline.
+- Proposer d'enchaîner sur le développement en suivant la "Boucle d'exécution" de `dev-loop` (lecture `MEMORY.md` → `TASKS.md` → commandes du CDC, vérification lancée avant chaque `[x]`, recette de brique) et les conventions de `dev-memory` (consigner décisions/pièges au fil de l'eau — voir "Pendant le dev").
 
 Si le contexte n'est pas clair, demander à l'utilisateur plutôt que de supposer.
 

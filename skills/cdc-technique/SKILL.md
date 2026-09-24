@@ -48,7 +48,12 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 
 5. **Découpage technique** — grandes briques techniques à développer, identifiées `B-01`, `B-02`... (stables, jamais renumérotées ; ce sont les sections de `TASKS.md` et l'unité de la recette de brique), avec pour chacune ce qu'elle couvre (`F-XX`, `E-XX`, `C-XX`) et ses dépendances envers d'autres briques si pertinent (ex. "la base Notion doit exister avant le workflow n8n de génération"). Doit couvrir toutes les briques du PRD, tous les écrans de `SCREENS.md` ET les composants de `DESIGN.md` — aucun ne doit rester sans brique technique correspondante.
 
-6. **Points à trancher / risques techniques** — décisions encore ouvertes nécessitant un choix avant de commencer le dev, ou risques techniques identifiés (ex. "n8n en v2.3.4, vérifier compatibilité avec tel node avant de s'engager sur cette approche").
+6. **Commandes & vérification** — comment un agent codant vérifie son travail sans deviner. Obligatoire dès qu'il y a du code (pour une automatisation sans code, ex. workflow n8n pur, décrire à la place comment on déclenche un test et où on lit le résultat) :
+   - **Commandes** : installer les dépendances, lancer en local, lancer les tests, lint/format, build, déployer — la commande exacte, pas "lancer les tests". Si une commande n'existe pas encore, dire dans quelle brique `B-XX` elle sera mise en place (généralement la première).
+   - **Stratégie de test, proportionnée au projet** : ce qui est testé automatiquement (et avec quel outil), ce qui est vérifié à la main, et comment. Pour un petit outil interne, "tests sur la logique métier des briques F-02 et F-03, le reste vérifié à la main" est une stratégie valable ; "pas de tests" doit être un choix explicite, pas un oubli.
+   - **Environnements & configuration** : local / prod, où vivent la configuration et les secrets (ex. `.env` non versionné + `.env.example` versionné), données de test éventuelles.
+
+7. **Points à trancher / risques techniques** — décisions encore ouvertes nécessitant un choix avant de commencer le dev, ou risques techniques identifiés (ex. "n8n en v2.3.4, vérifier compatibilité avec tel node avant de s'engager sur cette approche").
 
 ## Déroulé
 
@@ -64,7 +69,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 
 4. **Modèle de données — évaluer la pertinence.** Si plusieurs entités/relations émergent naturellement, documenter le modèle. Sinon, passer directement.
 
-5. **Risques et points ouverts.** Lister ce qui doit être tranché ou vérifié avant de lancer le dev.
+5. **Commandes & vérification, puis risques et points ouverts.** Fixer les commandes et la stratégie de test (proposer en fonction de la stack, avec recommandation), puis lister ce qui doit être tranché ou vérifié avant de lancer le dev.
 
 6. **Validation progressive.** Présenter section par section pour validation, en particulier la stack/architecture (fondation) avant de détailler le reste.
 
@@ -73,6 +78,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
    - Architecture claire côté back ET côté front (aucune des deux ignorée).
    - Modèle de données (si applicable) couvrant tous les écrans de `SCREENS.md` qui affichent/manipulent des données.
    - Toutes les intégrations externes identifiées, avec limites connues notées.
+   - Commandes & vérification renseignées : chaque commande est exacte ou rattachée à la brique `B-XX` qui la mettra en place, et la stratégie de test (y compris "pas de tests automatisés") est un choix explicite.
    - **Couverture vérifiée par identifiants** : lister tous les `F-XX` du PRD, `E-XX` de `SCREENS.md` et `C-XX` de `DESIGN.md` (hors éléments `(retiré)`), et vérifier que chacun apparaît dans au moins une brique `B-XX`. Présenter à l'utilisateur la liste des identifiants non couverts, ou dire explicitement qu'il n'y en a aucun — pas de "tout est couvert" sans avoir fait la vérification.
    - Aucun point flou ou "TODO" resté ouvert sur une brique du périmètre MVP (un point ouvert légitime va dans "Points à trancher / risques", pas laissé implicite).
 
@@ -108,6 +114,18 @@ Date : [date]
 - **B-01 — [Brique technique 1]** — Couvre : F-01, E-01, C-01 — Dépend de : [B-XX / aucune]
   [1-2 phrases : ce qui est construit]
 - **B-02 — [Brique technique 2]** — [...]
+
+## Commandes & vérification
+
+- Installer : `[commande]`
+- Lancer en local : `[commande]`
+- Tests : `[commande]` <!-- ou : "mis en place en B-01" -->
+- Lint / format : `[commande]` <!-- si pertinent -->
+- Build / déploiement : `[commande ou procédure]`
+
+**Stratégie de test** : [ce qui est testé automatiquement, avec quoi ; ce qui est vérifié à la main, comment]
+
+**Configuration & secrets** : [où ils vivent, ce qui est versionné ou non]
 
 ## Points à trancher / risques
 

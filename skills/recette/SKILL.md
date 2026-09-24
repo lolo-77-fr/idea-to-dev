@@ -68,7 +68,7 @@ Si l'environnement propose un outil de revue de sécurité ou de code intégré 
 
 - Les **cas limites listés dans le PRD** sont-ils réellement gérés (échec d'une API externe, données absentes, doublon, timeout) ?
 - Les chemins d'erreur mènent-ils à un état propre (message à l'utilisateur, statut cohérent, pas de donnée à moitié écrite) ?
-- Si des commandes de test/vérification existent (cf. `CDC.md` ou le projet), les lancer et reporter le résultat.
+- Lancer les commandes de test/vérification (section "Commandes & vérification" de `CDC.md`, ou celles du projet) et reporter le résultat. Si la stratégie de test prévoyait des tests automatisés qui n'existent pas, c'est une anomalie.
 
 ## Déroulé
 

@@ -12,7 +12,7 @@ Ne fait pas partie de l'enchaînement séquentiel du pipeline. Ne s'utilise pas 
 ## Deux modes
 
 - **Recette de brique** — déclenchée quand toutes les tâches d'une brique de `TASKS.md` sont `[x]`. Périmètre limité à cette brique `B-XX` : les fichiers listés dans ses tâches, et les briques fonctionnelles, écrans et composants qu'elle couvre (ligne "Couvre : F-XX, E-XX, C-XX" du "Découpage technique" de `CDC.md`). Axes : conformité, sécurité et robustesse de la brique ; incohérences limitées à ce qu'elle touche. Rapide, pour attraper les problèmes tant que le contexte est frais.
-- **Recette complète** — avant de considérer le projet/feature livré. Tout le périmètre (tous les `F-XX.Y`, `E-XX`, `C-XX` non retirés), les quatre axes, plus : cohérence entre briques (conventions, gestion d'erreurs, nommage), re-test de toutes les anomalies encore ouvertes des recettes de brique, audit des dépendances et des secrets à l'échelle du dépôt. Se conclut par un verdict livrable / non livrable.
+- **Recette complète** — avant de considérer le projet/feature livré. Tout le périmètre (tous les `F-XX.Y`, `E-XX`, `C-XX` non retirés), les quatre axes, plus : cohérence entre briques (conventions, gestion d'erreurs, nommage), re-test de toutes les anomalies encore ouvertes des recettes de brique, audit des dépendances et des secrets à l'échelle du dépôt, et génération d'une checklist **Parcours complet** dans `TESTS.md` (voir "Tests utilisateur"). Se conclut par un verdict livrable / non livrable.
 
 Si l'utilisateur ne précise pas, déduire le mode du contexte (brique qui vient d'être terminée → recette de brique ; toutes les tâches faites ou demande de "livraison" → recette complète) et l'annoncer.
 
@@ -74,7 +74,7 @@ Si l'environnement propose un outil de revue de sécurité ou de code intégré 
 ## Déroulé
 
 1. **Déterminer le mode et le périmètre** (brique ou complet), l'annoncer en une phrase.
-2. **Rassembler les références** : `MEMORY.md` d'abord, puis `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, et `RECETTE.md` s'il existe (anomalies encore ouvertes à re-tester). Signaler tout doc absent et recetter sur la base de ce qui est disponible. Vérifier aussi leur statut : un doc de référence en `brouillon` ou `à revoir` (cf. orchestrateur, "Statut des docs") rend la conformité moins fiable — le signaler en tête de la recette et dans son journal.
+2. **Rassembler les références** : `MEMORY.md` d'abord, puis `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, `RECETTE.md` s'il existe (anomalies encore ouvertes à re-tester) et `TESTS.md` s'il existe (retours de l'utilisateur pas encore traités : les traiter selon le tableau "Relire les retours" de `dev-loop` avant de conclure). Signaler tout doc absent et recetter sur la base de ce qui est disponible. Vérifier aussi leur statut : un doc de référence en `brouillon` ou `à revoir` (cf. orchestrateur, "Statut des docs") rend la conformité moins fiable — le signaler en tête de la recette et dans son journal.
 3. **Source de vérité sur l'état réel** :
    - **Avec accès au code** : inspecter le code, lancer les commandes de vérification disponibles.
    - **Sans accès au code (chat)** : prévenir que la recette sera **déclarative et partielle** — conformité uniquement, basée sur `TASKS.md`/`MEMORY.md` et ce que l'utilisateur décrit ou colle. Les axes sécurité et incohérences internes ne peuvent pas être vérifiés sérieusement sans le code : proposer de les faire dans un agent codant plutôt que de simuler un audit.
@@ -83,6 +83,15 @@ Si l'environnement propose un outil de revue de sécurité ou de code intégré 
 6. **Trier les écarts avec `MEMORY.md`** (voir section Références) et faire trancher l'utilisateur sur les déviations non documentées — une question à la fois, avec recommandation.
 7. **Présenter les anomalies par sévérité** (bloquantes d'abord), puis faire valider la liste : l'utilisateur peut contester une anomalie, abaisser une sévérité, ou accepter un risque.
 8. **Écrire/mettre à jour `RECETTE.md`**, puis mettre à jour `TASKS.md` et `MEMORY.md` (voir section Suites).
+
+## Tests utilisateur
+
+La recette analyse le code ; `TESTS.md` (géré par `dev-loop`, section "Tests utilisateur") recueille ce que l'utilisateur constate en utilisant l'app. Les deux se complètent :
+
+- **Recette de brique** : une fois la recette faite, `dev-loop` génère la checklist de la brique dans `TESTS.md` — le rappeler en fin de recette.
+- **Anomalies issues des tests** : un point KO ou une remarque décrivant un bug devient une anomalie comme une autre, avec `U-XX` cité dans la colonne "Attendu (réf.)", et suit le même circuit (tâche corrective, re-test).
+- **Recette complète** : générer dans `TESTS.md` une section `## Parcours complet · générée le [date]`, au même format que les sections de brique (`U-XX`, Préparer / Faire / Attendu / Résultat / Remarque). Elle enchaîne les briques comme le ferait un vrai utilisateur, du premier écran au résultat final (ex. créer un compte → réserver → recevoir la confirmation → annuler), plutôt que de répéter les tests brique par brique : elle vise ce qui casse quand les briques s'enchaînent.
+- **Verdict** : tant que le parcours complet n'a pas été rempli par l'utilisateur, le verdict est `En attente des tests utilisateur` (même sans anomalie bloquante). Il devient `Livrable` quand il n'y a plus d'anomalie bloquante ouverte **et** que le parcours complet ne comporte plus de point KO non traité.
 
 ## Sévérités et statuts
 
@@ -100,7 +109,7 @@ Un seul fichier cumulatif : les anomalies gardent leur identifiant d'une recette
 # Recette — [Nom du projet/feature]
 
 Dernière mise à jour : [date]
-Verdict courant : [Livrable / Non livrable — N bloquantes, N majeures ouvertes] <!-- après une recette complète -->
+Verdict courant : [Livrable / En attente des tests utilisateur / Non livrable — N bloquantes, N majeures ouvertes] <!-- après une recette complète -->
 
 ## Anomalies
 
@@ -123,7 +132,8 @@ Verdict courant : [Livrable / Non livrable — N bloquantes, N majeures ouvertes
 
 ### [date] — Recette complète
 - ...
-- Verdict : [Livrable / Non livrable]
+- Parcours complet généré dans TESTS.md : U-40 à U-48
+- Verdict : [Livrable / En attente des tests utilisateur / Non livrable]
 
 ## Remarques hors recette <!-- si pertinent : améliorations non demandées, hors périmètre -->
 
@@ -148,11 +158,11 @@ Une recette révèle souvent qu'un doc amont est faux ou incomplet (cas limite n
 
 Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` — cf. orchestrateur) — `RECETTE.md` est écrit dans ce même dossier, à côté de `TASKS.md` et `MEMORY.md`.
 
-- **Avec accès au système de fichiers** : lire directement les docs et le code, écrire `RECETTE.md`, mettre à jour `TASKS.md` et `MEMORY.md`.
+- **Avec accès au système de fichiers** : lire directement les docs et le code, écrire `RECETTE.md`, mettre à jour `TASKS.md` et `MEMORY.md`, et `TESTS.md` pour le parcours complet et les lignes "Suite".
 - **En chat sans accès fichiers** : demander à l'utilisateur de coller/uploader les documents disponibles (`MEMORY.md` en priorité), produire le contenu de `RECETTE.md` et les ajouts à `TASKS.md`/`MEMORY.md`, et indiquer où les enregistrer.
 
 ## Fin de session
 
-- **Recette de brique** : si anomalies bloquantes/majeures, proposer de traiter les tâches correctives avant d'attaquer la brique suivante (sans l'imposer) ; sinon, proposer de reprendre `dev-loop` sur la brique suivante.
-- **Recette complète** : annoncer le verdict. Si non livrable, proposer de traiter les tâches correctives puis une recette de re-test limitée aux anomalies ouvertes.
+- **Recette de brique** : si anomalies bloquantes/majeures, proposer de traiter les tâches correctives avant d'attaquer la brique suivante (sans l'imposer) ; sinon, proposer de reprendre `dev-loop` sur la brique suivante. Dans les deux cas, la checklist de la brique est ensuite générée dans `TESTS.md` (cf. `dev-loop`).
+- **Recette complète** : annoncer le verdict et signaler la checklist "Parcours complet" ajoutée à `TESTS.md`. Si non livrable, proposer de traiter les tâches correctives puis une recette de re-test limitée aux anomalies ouvertes.
 - Ne rien corriger automatiquement, et ne pas enchaîner sur un autre skill sans confirmation.

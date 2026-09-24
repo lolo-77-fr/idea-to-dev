@@ -59,7 +59,7 @@ Les six docs d'étape (`BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `DES
 | `à revoir — [cause]` | Un doc amont a changé depuis, sur un point qui concerne ce doc (ex. `à revoir — F-03 modifiée dans PRD.md le 2026-09-24`) | La règle de répercussion (étape 5) |
 
 - Chaque skill vérifie le statut des docs dont il dépend avant de s'appuyer dessus, et signale un doc en `brouillon` ou `à revoir` (sans bloquer si l'utilisateur veut continuer).
-- `TASKS.md`, `MEMORY.md` et `RECETTE.md` n'ont pas de statut : ce sont des docs vivants, pas des étapes que l'on valide une fois.
+- `TASKS.md`, `MEMORY.md`, `RECETTE.md` et `TESTS.md` n'ont pas de statut : ce sont des docs vivants, pas des étapes que l'on valide une fois.
 - Un doc modifié à la main hors pipeline ne change pas de statut tout seul : c'est un cas de réconciliation (cas C).
 - **Docs produits avant l'introduction du statut** (aucune ligne `Statut :`) : les considérer comme `validé` s'ils sont complets, et proposer d'ajouter la ligne à la prochaine intervention sur le doc.
 
@@ -84,7 +84,7 @@ Ne jamais l'imposer : l'utilisateur choisit. Le mode retenu est inscrit dans l'e
 - `brainstorm` et `product-brief` peuvent être produits dans le même échange.
 - Les recettes de brique deviennent optionnelles ; la recette complète avant livraison reste obligatoire.
 
-**Ce qui ne change pas** : tous les docs sont produits, dans leur format ; `ui-screens` et `ui-design` restent obligatoires ; identifiants et critères d'acceptation ; checklist de clôture intégrale de `cdc-technique` (couverture, commandes & vérification) ; `MEMORY.md` et la boucle d'exécution de `dev-loop` ; l'axe sécurité de la recette.
+**Ce qui ne change pas** : tous les docs sont produits, dans leur format ; `ui-screens` et `ui-design` restent obligatoires ; identifiants et critères d'acceptation ; checklist de clôture intégrale de `cdc-technique` (couverture, commandes & vérification) ; `MEMORY.md` et la boucle d'exécution de `dev-loop` ; la checklist `TESTS.md` générée en fin de brique ; l'axe sécurité de la recette.
 
 **Sortie du mode rapide** : si un critère cesse d'être vrai en cours de route (deuxième rôle, paiement, périmètre qui grossit...), le signaler et proposer de repasser en mode standard pour les étapes restantes — en retirant `Mode : rapide` de `BRIEF.md` si l'utilisateur accepte.
 
@@ -100,7 +100,8 @@ Les docs du pipeline se référencent par identifiants, pour que la couverture (
 | `C-01` | `DESIGN.md` | composant | CDC, RECETTE |
 | `B-01` | `CDC.md` | brique technique (section de `TASKS.md`, unité de la recette de brique) | TASKS, MEMORY, RECETTE |
 | `T-01` | `TASKS.md` | tâche | MEMORY, RECETTE |
-| `A-01` | `RECETTE.md` | anomalie | TASKS (tâches correctives), MEMORY |
+| `A-01` | `RECETTE.md` | anomalie | TASKS (tâches correctives), MEMORY, TESTS (lignes "Suite") |
+| `U-01` | `TESTS.md` | point de test utilisateur | RECETTE (anomalies issues des tests) |
 
 Règles communes : un identifiant est **stable** (jamais renuméroté) ; un élément ajouté prend le numéro suivant ; un élément retiré garde son identifiant, marqué `(retiré)` — pour qu'aucune référence existante ne se mette à pointer sur autre chose.
 
@@ -168,6 +169,8 @@ L'orchestrateur veille donc à ce que, pendant toute la phase de dev :
 
 La recette confronte le code aux docs amont **et** à `MEMORY.md`. Les anomalies retenues deviennent des tâches correctives dans `TASKS.md` ; un écart qui révèle un doc amont faux ou incomplet passe par la règle de répercussion des changements ci-dessus.
 
+**Tests utilisateur.** Après chaque recette de brique (ou tout de suite si elle est déclinée), `dev-loop` ajoute la checklist de la brique à `TESTS.md` : des points à tester à la main, chacun avec une zone de remarque. L'utilisateur la remplit à son rythme — sans bloquer la brique suivante — puis l'agent relit le fichier et traite tous les retours d'un coup (anomalies, tâches correctives, demandes de changement). La recette complète y ajoute un "Parcours complet" de bout en bout, dont dépend le verdict de livraison.
+
 ## Rendu visuel optionnel — `ui-preview`
 
 `ui-preview` n'est pas une étape obligatoire : il permet, via Stitch, de générer un vrai rendu visuel des écrans (`SCREENS.md`) en respectant le design system (`DESIGN.md`), pour ceux qui veulent voir concrètement les écrans avant de passer au technique. À proposer une fois après `ui-design`, jamais imposé, et sans jamais retarder le passage à `cdc-technique` si l'utilisateur décline ou si Stitch n'est pas configuré. Si le rendu Stitch fait apparaître un écart avec `DESIGN.md`, appliquer la règle de répercussion des changements ci-dessus.
@@ -179,4 +182,5 @@ Si l'utilisateur invoque ce skill sur un projet où `.idea-to-dev/TASKS.md` et `
 - Vérifier d'abord si une réconciliation (cas C) est nécessaire avant de repartir — voir Démarrage.
 - Lire `.idea-to-dev/MEMORY.md` puis `.idea-to-dev/TASKS.md` pour le contexte.
 - Si `.idea-to-dev/RECETTE.md` existe, relever les anomalies encore ouvertes et leurs tâches correctives.
+- Si `.idea-to-dev/TESTS.md` existe, relever les tests en attente et les retours pas encore traités.
 - Résumer brièvement l'état courant et proposer de continuer le développement (pas de repasser par brainstorm/brief/etc., qui sont déjà faits) — sauf si l'utilisateur signale explicitement vouloir revoir une étape antérieure (ex. un changement de périmètre nécessitant de retoucher le PRD, à traiter via la règle de répercussion des changements).

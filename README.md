@@ -23,7 +23,7 @@ Trois skills hors séquence complètent le pipeline :
 | `ui-design` | Définit le design system du MVP : tokens (couleurs, typographie, espacements, rayons, ombres) et description textuelle des composants clés | `DESIGN.md` |
 | `ui-preview` | Étape optionnelle : génère un rendu visuel réel des écrans via Stitch (Google Labs), en respectant `DESIGN.md` | — |
 | `cdc-technique` | Traduit le fonctionnel en choix techniques : stack, architecture, intégrations, découpage technique — clôturé par une checklist de complétude | `CDC.md` |
-| `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut, impose la trace des déviations dans `MEMORY.md` | `TASKS.md` |
+| `dev-loop` | Découpe le CDC en micro-tâches (2-5 min) avec critères de vérification, gère leur statut, impose la trace des déviations dans `MEMORY.md` ; génère en fin de brique une checklist de tests utilisateur avec zone de remarque, puis traite les retours | `TASKS.md`, `TESTS.md` |
 | `dev-memory` | Mémoire du dev : décisions et déviations vs CDC/TASKS, pièges, debug actif, points de retour ; référence de la recette pour distinguer déviation voulue et anomalie ; point de départ de la réconciliation d'un projet ayant évolué hors-pipeline | `MEMORY.md` |
 | `recette` | Contrôle conformité (PRD/SCREENS/DESIGN), sécurité adaptée à la stack, incohérences (code ↔ docs ↔ `MEMORY.md`, code interne) et robustesse ; anomalies → tâches correctives | `RECETTE.md` |
 | `gtm` | Priorise les canaux d'acquisition/vente d'un produit livré via la méthodologie Bullseye, en continuité du pipeline ou de façon autonome | — |
@@ -83,7 +83,8 @@ Chaque skill lit/écrit ses documents dans `.idea-to-dev/` à la racine du proje
 ├── CDC.md
 ├── TASKS.md
 ├── MEMORY.md
-└── RECETTE.md
+├── RECETTE.md
+└── TESTS.md
 ```
 
 - **Avec accès au système de fichiers** (Claude Code, Antigravity) : le dossier est créé/lu automatiquement.

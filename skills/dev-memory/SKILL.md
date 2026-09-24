@@ -85,4 +85,4 @@ Omettre les sections "Debug en cours" et "Points de retour" quand elles ne sont 
 
 ## Détection de contexte
 
-Comme les autres skills du pipeline, vérifier la présence de `CDC.md`/`PRD.md`/`SCREENS.md`/`DESIGN.md`/`TASKS.md`/`RECETTE.md` (dans `.idea-to-dev/`) pour situer le projet, mais `MEMORY.md` peut exister et être utile même en l'absence des autres docs (ex. petit projet sans CDC formel, mais avec une session de debug qui s'allonge).
+Comme les autres skills du pipeline, vérifier la présence de `CDC.md`/`PRD.md`/`SCREENS.md`/`DESIGN.md`/`TASKS.md`/`RECETTE.md`/`TESTS.md` (dans `.idea-to-dev/`) pour situer le projet, mais `MEMORY.md` peut exister et être utile même en l'absence des autres docs (ex. petit projet sans CDC formel, mais avec une session de debug qui s'allonge).

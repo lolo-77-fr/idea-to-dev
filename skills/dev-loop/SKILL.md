@@ -1,6 +1,6 @@
 ---
 name: dev-loop
-description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches. Produit et maintient un fichier TASKS.md. Septième étape du pipeline idée → dev (suit cdc-technique, fonctionne avec dev-memory ; déclenche recette à la fin de chaque brique).
+description: Découpe un CDC technique en micro-tâches de développement (2-5 minutes chacune, chemins de fichiers exacts, critères de vérification), et gère leur statut d'avancement au fil du développement. Utiliser ce skill quand l'utilisateur veut découper un projet/feature en tâches de dev concrètes, parle de "plan de tâches", "TASKS", "découpage en tickets", veut faire avancer le développement tâche par tâche, ou demande où on en est dans les tâches, ou signale avoir rempli TESTS.md / fini ses tests utilisateur. Produit et maintient un fichier TASKS.md. Septième étape du pipeline idée → dev (suit cdc-technique, fonctionne avec dev-memory ; déclenche recette et une checklist de tests utilisateur TESTS.md à la fin de chaque brique).
 ---
 
 # Dev Loop
@@ -81,7 +81,7 @@ Quand l'utilisateur revient sur le projet :
 - **Mettre à jour les statuts** au fur et à mesure que les tâches sont complétées (sur indication de l'utilisateur, ou en le déduisant si le contexte de la conversation le montre clairement — dans ce cas, confirmer avec l'utilisateur avant de marquer comme fait).
 - **Si une tâche s'avère mal calibrée** (trop grosse, dépendance oubliée, plus pertinente) en cours de réalisation, l'ajuster directement dans `TASKS.md` (la scinder, la reformuler, ajouter une tâche manquante) plutôt que de laisser le fichier devenir obsolète.
 - **Si de nouvelles tâches émergent** naturellement pendant le développement (besoin non anticipé au CDC), les ajouter à la suite de la brique concernée, ou dans une section "Tâches ajoutées en cours de dev" si elles ne rattachent à aucune brique existante — et vérifier si ce besoin doit aussi remonter au CDC/PRD (cf. règle de répercussion des changements ci-dessus).
-- **Brique terminée → recette de brique.** Quand toutes les tâches d'une brique sont `[x]`, proposer une recette de brique (skill `recette`) avant d'attaquer la brique suivante. Les anomalies retenues reviennent sous forme de tâches correctives dans `TASKS.md`.
+- **Brique terminée → recette de brique, puis tests utilisateur.** Quand toutes les tâches d'une brique sont `[x]`, proposer une recette de brique (skill `recette`), puis générer la section de la brique dans `TESTS.md` (voir "Tests utilisateur"). Les anomalies retenues reviennent sous forme de tâches correctives dans `TASKS.md`.
 
 ## Boucle d'exécution (agent codant avec accès au code)
 
@@ -90,9 +90,10 @@ Quand le développement se fait dans cette conversation (Claude Code, Antigravit
 **En début de session**
 
 1. Lire `MEMORY.md`, puis `TASKS.md`, puis la section "Commandes & vérification" de `CDC.md`.
-2. Vérifier que le fichier d'instructions du projet pointe vers ces docs (voir "Lien avec le fichier d'instructions du projet" ci-dessous) ; sinon, le proposer une fois.
-3. Choisir la tâche : une tâche `[~]` en cours s'il y en a une, sinon la première `[ ]` dont les dépendances sont faites.
-4. Convenir du **rythme** avec l'utilisateur, une fois par session : tâche par tâche (arrêt après chaque tâche) ou brique par brique (enchaîner les tâches d'une brique `B-XX`, arrêt en fin de brique). Par défaut : brique par brique.
+2. Si `TESTS.md` existe : relever les points en attente (aucune case cochée, "Pas pu tester", re-tests demandés) et les rappeler en une phrase à l'utilisateur ; si des retours ont été saisis mais pas encore traités (point KO ou remarque sans ligne "Suite"), proposer de les traiter d'abord.
+3. Vérifier que le fichier d'instructions du projet pointe vers ces docs (voir "Lien avec le fichier d'instructions du projet" ci-dessous) ; sinon, le proposer une fois.
+4. Choisir la tâche : une tâche `[~]` en cours s'il y en a une, sinon la première `[ ]` dont les dépendances sont faites.
+5. Convenir du **rythme** avec l'utilisateur, une fois par session : tâche par tâche (arrêt après chaque tâche) ou brique par brique (enchaîner les tâches d'une brique `B-XX`, arrêt en fin de brique). Par défaut : brique par brique.
 
 **Pour chaque tâche**
 
@@ -103,11 +104,82 @@ Quand le développement se fait dans cette conversation (Claude Code, Antigravit
 5. **Vérification KO** → corriger et relancer. Après deux tentatives infructueuses sur la même cause, arrêter d'essayer à l'aveugle : consigner le problème dans la section "Debug en cours" de `MEMORY.md` (pistes essayées et résultats) et faire le point avec l'utilisateur.
 6. Toute déviation par rapport à ce que prévoyait la tâche ou le CDC → `MEMORY.md` immédiatement (voir section suivante).
 
-**En fin de brique** : toutes les tâches de la brique `[x]` → proposer une recette de brique (skill `recette`) avant de passer à la suivante.
+**En fin de brique** : toutes les tâches de la brique `[x]` → proposer une recette de brique (skill `recette`), puis générer la checklist de la brique dans `TESTS.md` (voir "Tests utilisateur"), avant de passer à la suivante.
 
 Ne jamais passer une tâche en `[x]` sans que sa vérification ait été lancée et réussie, ou explicitement confirmée par l'utilisateur.
 
 **En chat sans accès au code**, cette boucle ne s'applique pas telle quelle : l'utilisateur exécute les tâches dans son agent codant. Se limiter à mettre à jour les statuts sur ses indications et à rappeler de consigner les déviations dans `MEMORY.md`.
+
+## Tests utilisateur (TESTS.md)
+
+La boucle d'exécution prouve ce que l'agent peut constater lui-même (tests, commandes). Elle ne remplace pas un humain qui utilise l'app : rendu visuel, vrai appareil, email réellement reçu, fluidité d'un parcours. `TESTS.md` est la checklist que l'utilisateur remplit pour ça, avec une zone de remarque par point, et que l'agent relit d'un bloc une fois la série faite.
+
+### Quand la générer
+
+**Automatiquement à la fin de chaque brique**, sans attendre qu'on la demande (y compris en mode rapide) : quand toutes les tâches d'une brique `B-XX` sont `[x]`, proposer d'abord la recette de brique (skill `recette`) ; une fois la recette faite — ou tout de suite si l'utilisateur la décline —, ajouter la section de la brique à `TESTS.md` et le signaler. La génération ne bloque pas la suite : l'utilisateur peut passer à la brique suivante sans avoir testé.
+
+### Contenu
+
+Construire les points à partir de ce qui existe déjà, pas d'une liste générique :
+
+- les critères d'acceptation `F-XX.Y` des briques fonctionnelles couvertes par `B-XX` (ligne "Couvre" du CDC), reformulés en actions ;
+- les écrans `E-XX` concernés, avec leurs états particuliers (vide, erreur, chargement) ;
+- les cas limites du PRD qui comptent.
+
+5 à 12 points par brique : le parcours principal d'abord, puis 1 ou 2 parcours d'erreur. Privilégier ce que l'agent n'a pas pu vérifier lui-même ; ne pas faire retester à la main ce qu'un test automatique a déjà prouvé. Chaque point est écrit pour quelqu'un qui ne lit pas le code : actions concrètes (URL, bouton, saisie), résultat attendu observable.
+
+Les points sont numérotés `U-01`, `U-02`... en continu sur tout le fichier (identifiants stables, cf. orchestrateur `idea-to-dev`).
+
+### Format de TESTS.md
+
+```markdown
+# Tests utilisateur — [Nom du projet/feature]
+
+## Lancer l'app
+
+- [Commande ou URL — cf. CDC.md "Commandes & vérification"]
+- Comptes de test : [identifiants / comment en créer un]
+
+## B-02 — [Nom de la brique] · générée le [date]
+
+### U-07 — [Ce qu'on teste, en une ligne]
+Critère : F-02.3 · Écran : E-03
+
+**Préparer** : [compte, données, appareil — si nécessaire]
+**Faire** :
+1. [Action concrète]
+2. [...]
+**Attendu** : [ce qu'on doit constater]
+
+**Résultat** : [ ] OK   [ ] KO   [ ] Pas pu tester
+**Remarque** :
+
+### U-08 — [...]
+```
+
+L'utilisateur coche un résultat et écrit, s'il le souhaite, une remarque libre (sur une ou plusieurs lignes, y compris sur un point OK). "Pas pu tester" distingue un test impossible (appareil absent, donnée manquante) d'un oubli.
+
+### Relire les retours
+
+Quand l'utilisateur signale avoir fini une série ("tests finis", "j'ai rempli TESTS.md"...), relire la section concernée et traiter chaque point :
+
+| Retour | Traitement |
+|---|---|
+| OK sans remarque | Rien |
+| KO, ou remarque qui décrit un bug (même sur un point OK) | Anomalie `A-XX` dans `RECETTE.md` (cf. skill `recette`, en citant `U-XX` comme référence), puis tâche corrective dans `TASKS.md` |
+| Remarque qui est une demande de changement | Pas un bug : règle de répercussion (évolution volontaire ? quel doc amont ?) |
+| Remarque qui est une question | Y répondre dans la conversation |
+| Pas pu tester, ou aucune case cochée | Garder en attente, le rappeler plus tard |
+
+En cas de doute sur la nature d'une remarque (bug ou souhait ?), demander plutôt que de trancher.
+
+Sous chaque point traité, ajouter une ligne de suivi pour que l'utilisateur voie ce que son retour est devenu — sans jamais modifier ce qu'il a écrit :
+
+```markdown
+**Suite** : → A-12, corrigé par T-34 — à re-tester
+```
+
+**Re-test** : une fois la tâche corrective faite, ajouter sous le point une nouvelle ligne de résultat avec sa propre remarque (`**Re-test du [date]** : [ ] OK [ ] KO` / `**Remarque** :`), sans écraser le premier retour, et signaler à l'utilisateur les points à re-tester.
 
 ## Lien avec le fichier d'instructions du projet
 
@@ -122,7 +194,8 @@ Les specs et le suivi de ce projet sont dans `.idea-to-dev/`.
 - Commandes (tests, lint, build) et stratégie de test : `.idea-to-dev/CDC.md`, section "Commandes & vérification".
 - Une tâche n'est `[x]` qu'une fois sa vérification lancée et réussie.
 - Toute déviation par rapport à `CDC.md` ou `TASKS.md` est consignée immédiatement dans `MEMORY.md` (identifiants concernés, état du doc amont).
-- Fin d'une brique `B-XX` : proposer une recette de brique (skill `recette`).
+- Fin d'une brique `B-XX` : proposer une recette de brique (skill `recette`), puis générer sa checklist dans `.idea-to-dev/TESTS.md`.
+- Quand l'utilisateur a rempli `TESTS.md` : relire ses résultats et remarques, et les traiter (anomalies, tâches correctives, lignes "Suite").
 ```
 
 ## Tenue de MEMORY.md pendant le dev
@@ -138,13 +211,13 @@ Chaque entrée référence la tâche/brique concernée et indique si le doc amon
 
 ## Emplacement des fichiers
 
-Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — `CDC.md` et `TASKS.md` désignent les fichiers de ce dossier.
+Tous les documents du pipeline vivent dans `.idea-to-dev/` à la racine du projet (ou `.idea-to-dev/[nom-feature]/` sur un projet multi-features — cf. orchestrateur) — `CDC.md`, `TASKS.md` et `TESTS.md` désignent les fichiers de ce dossier.
 
-- **Avec accès au système de fichiers** : chercher `.idea-to-dev/CDC.md`, créer/mettre à jour `.idea-to-dev/TASKS.md` dans ce même dossier — y compris les mises à jour de statuts au fil du dev.
-- **En chat sans accès fichiers** : demander à l'utilisateur de coller/uploader `CDC.md` si disponible, puis indiquer d'enregistrer `TASKS.md` dans `.idea-to-dev/TASKS.md`. Pour les mises à jour ultérieures, demander à l'utilisateur de fournir le `TASKS.md` actuel pour le modifier.
+- **Avec accès au système de fichiers** : chercher `.idea-to-dev/CDC.md`, créer/mettre à jour `.idea-to-dev/TASKS.md` et `.idea-to-dev/TESTS.md` dans ce même dossier — y compris les mises à jour de statuts au fil du dev.
+- **En chat sans accès fichiers** : demander à l'utilisateur de coller/uploader `CDC.md` si disponible, puis indiquer d'enregistrer `TASKS.md` dans `.idea-to-dev/TASKS.md`. Pour les mises à jour ultérieures, demander à l'utilisateur de fournir le `TASKS.md` actuel pour le modifier. Même principe pour `TESTS.md` : produire la section de la brique à ajouter, et demander le fichier rempli pour en traiter les retours.
 
 ## Fin de session
 
 - Vérifier que `MEMORY.md` est à jour (état courant, décisions et pièges de la session) — le mettre à jour via `dev-memory` si ce n'est pas le cas, surtout avant une pause ou une reprise prévue plus tard.
-- Si une brique vient d'être terminée, proposer une recette de brique ; si toutes les tâches connues sont faites, proposer une recette complète (skill `recette`) avant de considérer le projet/feature livré.
+- Si une brique vient d'être terminée, proposer une recette de brique puis générer sa checklist `TESTS.md` ; si toutes les tâches connues sont faites, proposer une recette complète (skill `recette`) avant de considérer le projet/feature livré.
 - Pas de génération de prompt pour la suite sauf demande explicite.

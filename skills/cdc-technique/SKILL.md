@@ -1,6 +1,6 @@
 ---
 name: cdc-technique
-description: Rédige un cahier des charges technique (stack, architecture, modèle de données si pertinent, intégrations, découpage technique) à partir d'un PRD, d'un SCREENS.md et d'un DESIGN.md déjà détaillés, rédigé pour être directement consommable par une IA codante (Antigravity/Claude Code). Ne se clôture qu'après passage d'une checklist de complétude explicite — pas sur simple confirmation rapide. Utiliser ce skill quand l'utilisateur veut cadrer les choix techniques d'un projet/feature, parle de "CDC technique", "architecture", "stack", ou veut préparer la base technique avant de découper en tâches de dev. Produit un fichier CDC.md. Sixième étape du pipeline idée → dev (suit brainstorm, product-brief, prd, ui-screens et ui-design, précède dev-loop, dev-memory).
+description: Rédige un cahier des charges technique (stack, architecture, modèle de données si pertinent, intégrations, découpage technique) à partir d'un PRD, d'un SCREENS.md et d'un DESIGN.md déjà détaillés, rédigé pour être directement consommable par une IA codante (Antigravity/Claude Code). Ne se clôture qu'après passage d'une checklist de complétude explicite — pas sur simple confirmation rapide. Utiliser ce skill quand l'utilisateur veut cadrer les choix techniques d'un projet/feature, parle de "CDC technique", "architecture", "stack", ou veut préparer la base technique avant de découper en tâches de dev. Produit un fichier CDC.md. Sixième étape du pipeline idée → dev (suit ui-design, précède dev-loop).
 ---
 
 # CDC Technique

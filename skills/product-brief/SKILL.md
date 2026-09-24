@@ -1,6 +1,6 @@
 ---
 name: product-brief
-description: Structure un cadrage produit synthétique (vision, utilisateurs/parties prenantes si pertinent, périmètre MVP vs futur, objectifs et métriques de succès, contraintes) à partir d'une idée déjà explorée. Utiliser ce skill quand l'utilisateur veut cadrer un projet/feature avant de rédiger un PRD, parler de "brief produit", "blueprint", ou structurer une idée en vue du développement. Produit un fichier BRIEF.md synthétique. Deuxième étape du pipeline idée → dev (suit brainstorm, précède prd, ui-screens, cdc-technique, dev-loop, dev-memory).
+description: Structure un cadrage produit synthétique (vision, utilisateurs/parties prenantes si pertinent, périmètre MVP vs futur, objectifs et métriques de succès, contraintes) à partir d'une idée déjà explorée. Utiliser ce skill quand l'utilisateur veut cadrer un projet/feature avant de rédiger un PRD, parler de "brief produit", "blueprint", ou structurer une idée en vue du développement. Produit un fichier BRIEF.md synthétique. Deuxième étape du pipeline idée → dev (suit brainstorm, précède prd).
 ---
 
 # Product Brief

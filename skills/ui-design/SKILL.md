@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: Définit le design system du MVP — tokens (couleurs, typographie, espacements, rayons, ombres) et description textuelle des composants UI clés (boutons, cartes, formulaires, navigation...) — à partir des écrans définis dans SCREENS.md. Construction libre par défaut, sauf si l'utilisateur mentionne une identité de marque existante à respecter. Utiliser ce skill quand l'utilisateur veut cadrer l'identité visuelle/design system d'un projet, parle de "design system", "charte", "tokens", "style des composants", ou veut préciser l'apparence des écrans avant l'architecture technique. Produit un fichier DESIGN.md. Cinquième étape du pipeline idée → dev (suit brainstorm, product-brief, prd et ui-screens, précède cdc-technique).
+description: Définit le design system du MVP — tokens (couleurs, typographie, espacements, rayons, ombres) et description textuelle des composants UI clés (boutons, cartes, formulaires, navigation...) — à partir des écrans définis dans SCREENS.md. Construction libre par défaut, sauf si l'utilisateur mentionne une identité de marque existante à respecter. Utiliser ce skill quand l'utilisateur veut cadrer l'identité visuelle/design system d'un projet, parle de "design system", "charte", "tokens", "style des composants", ou veut préciser l'apparence des écrans avant l'architecture technique. Produit un fichier DESIGN.md. Cinquième étape du pipeline idée → dev (suit ui-screens, précède cdc-technique ; ui-preview optionnel entre les deux).
 ---
 
 # UI Design
@@ -13,7 +13,7 @@ Même logique que `ui-screens` : structuration avec challenge ciblé, une questi
 
 - **Détecter `SCREENS.md`.** S'il existe, en extraire les composants réellement utilisés à travers les écrans (pas une liste générique de composants UI classiques) — c'est la base pour savoir quoi designer. S'il n'existe pas, signaler et proposer `ui-screens` d'abord.
 - **Détecter une identité de marque existante.** Par défaut, construction **libre** pour chaque projet — ne pas supposer qu'il faut respecter une charte existante. Si l'utilisateur mentionne une identité à respecter (charte Zébra, charte d'un client), s'appuyer dessus pour les tokens plutôt que d'inventer.
-- **Rester textuel.** Pas de génération d'image, de maquette, ou de rendu visuel — uniquement des valeurs (couleurs en hex/nommées, tailles, etc.) et des descriptions de comportement/apparence en texte. Si l'utilisateur veut un aperçu visuel, le signaler comme hors du périmètre de ce skill (relève d'un outil de maquettage ou d'une génération d'image séparée).
+- **Rester textuel.** Pas de génération d'image, de maquette, ou de rendu visuel — uniquement des valeurs (couleurs en hex/nommées, tailles, etc.) et des descriptions de comportement/apparence en texte. Si l'utilisateur veut un aperçu visuel, ce n'est pas le rôle de ce skill : une fois `DESIGN.md` validé, proposer `ui-preview` (rendu des écrans via Stitch, optionnel).
 - **Rester au niveau système, pas écran par écran.** Le design system définit des règles réutilisables (un bouton primaire se comporte pareil partout) — ne pas redéfinir un style par écran.
 
 ## Répercussion des changements (règle transverse)

@@ -27,23 +27,20 @@ Skills reference each other heavily, so a change to one usually requires touchin
 
 - **Every skill repeats the "Répercussion des changements (règle transverse)" section** (signal → confirm → propagate upstream → flag impacted `TASKS.md` tasks). The canonical version lives in `skills/idea-to-dev/SKILL.md`; per-skill copies are short reminders.
 - **Every skill has an "Emplacement des fichiers" section** stating docs live in `.idea-to-dev/` (or `.idea-to-dev/[nom-feature]/`) at the target project's root, with a chat-without-filesystem fallback.
-- **Pipeline order/step numbers appear in many places**: each `description` frontmatter ("Nième étape du pipeline… suit X, précède Y"), each body intro ("Nième maillon"), the orchestrator's step lists, and the README table/diagram. Adding, removing, or reordering a step means updating all of them. Note: several descriptions (`brainstorm`, `product-brief`, `prd`) still omit `ui-design` from the chain — fix opportunistically.
+- **Pipeline order/step numbers appear in many places**: each `description` frontmatter ("Nième étape du pipeline… suit X, précède Y"), each body intro ("Nième maillon"), the orchestrator's step lists, and the README table/diagram. Adding, removing, or reordering a step means updating all of them. Descriptions only name the previous and next step, to keep this manageable.
 - `MEMORY.md` is the register of deviations from `CDC.md`/`TASKS.md` during dev: `dev-loop` must log them (with task/brique + upstream-doc status), and `recette` uses it to tell intended deviations from anomalies. Keep `dev-loop`, `dev-memory`, `recette` and the orchestrator aligned on this.
 - `ui-screens` and `ui-design` are mandatory/non-skippable; `cdc-technique` closes only after its completeness checklist. Don't weaken these in orchestrator edits.
 - The `description` frontmatter drives skill triggering — keep trigger phrases ("PRD", "CDC technique", "TASKS", …) when rewording.
 
-## Repackaging `.skill` files
+## Consistency check & packaging
 
-After editing a `SKILL.md`, rebuild its archive (the zip must contain the `<name>/SKILL.md` path):
-
-```bash
-cd skills && rm -f ../packaged/<name>.skill && zip -X ../packaged/<name>.skill <name>/SKILL.md
-```
-
-Check which packages are out of date:
+Run after any edit to a skill, the README or `.claude-plugin/`:
 
 ```bash
-for f in packaged/*.skill; do n=$(basename $f .skill); unzip -p $f "$n/SKILL.md" | diff -q - skills/$n/SKILL.md >/dev/null || echo "$n stale"; done
+scripts/check.sh        # verify only (exit 1 on any problem)
+scripts/check.sh --fix  # also rebuild stale/missing packaged/<name>.skill zips
 ```
 
-When adding a skill, also update the README table and the `.claude-plugin/` descriptions.
+It checks folder name = frontmatter `name`, presence of the shared sections, step ordinals in descriptions and intros, the orchestrator's chain, README table and marketplace description vs `skills/`, plugin version parity, and package freshness. The pipeline order lives in the `PIPELINE`/`ORDINALS` arrays at the top of the script — update them when adding or reordering a step.
+
+When adding a skill, also add its README table row and mention it in the `.claude-plugin/marketplace.json` description (the script flags both if missing).

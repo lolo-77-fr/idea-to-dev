@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: Aide à clarifier une idée de projet ou de fonctionnalité floue en challengeant l'utilisateur de façon pragmatique, une question à la fois, jusqu'à converger vers un problème clairement défini et une liste d'idées retenues/écartées. Utiliser ce skill quand l'utilisateur a une idée vague, veut "brainstormer", explorer un concept, ou démarrer un nouveau projet/feature sans cadrage clair. Produit un fichier BRAINSTORM.md synthétique en sortie. Première étape du pipeline idée → dev (suivi de product-brief, prd, ui-screens, cdc-technique, dev-loop, dev-memory).
+description: Aide à clarifier une idée de projet ou de fonctionnalité floue en challengeant l'utilisateur de façon pragmatique, une question à la fois, jusqu'à converger vers un problème clairement défini et une liste d'idées retenues/écartées. Utiliser ce skill quand l'utilisateur a une idée vague, veut "brainstormer", explorer un concept, ou démarrer un nouveau projet/feature sans cadrage clair. Produit un fichier BRAINSTORM.md synthétique en sortie. Première étape du pipeline idée → dev (précède product-brief).
 ---
 
 # Brainstorm
@@ -48,7 +48,7 @@ Si en construisant ce brainstorm, un changement de cap apparaît par rapport à 
    - Puis lister les **idées retenues** et faire valider (ajustements possibles à ce stade).
    - Puis, séparément, les **idées hors scope v1** (reportées) et les **idées écartées** (rejetées) — bien distinguer les deux : une idée hors scope pourra revenir, une idée écartée a une raison de fond qui la disqualifie.
 
-   Chaque bloc doit être assez court pour être lu et corrigé rapidement. Ne jamais générer le fichier final sans validation explicite de l'ensemble (cf. préférence "Direct & Pragmatique").
+   Chaque bloc doit être assez court pour être lu et corrigé rapidement. Ne jamais générer le fichier final sans validation explicite de l'ensemble.
 
 ## Format de BRAINSTORM.md
 

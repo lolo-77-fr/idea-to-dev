@@ -1,6 +1,6 @@
 ---
 name: prd
-description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit brainstorm et product-brief, précède ui-screens, cdc-technique, dev-loop, dev-memory).
+description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit product-brief, précède ui-screens).
 ---
 
 # PRD (Product Requirements Document)

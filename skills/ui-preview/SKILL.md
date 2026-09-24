@@ -20,7 +20,7 @@ description: Génère un rendu visuel réel des écrans définis dans SCREENS.md
 
 Si un connecteur Stitch est disponible :
 
-- Ce connecteur est un outil tiers ([third_party_mcp_app]) — suivre la procédure standard (recherche du connecteur, proposition à l'utilisateur avant tout appel) sauf si l'utilisateur a explicitement nommé Stitch ou vient de le choisir.
+- Stitch est un service tiers : avant le premier appel, annoncer à l'utilisateur ce qui va lui être envoyé (descriptions d'écrans, tokens) et obtenir son accord — sauf s'il vient lui-même de demander une génération via Stitch.
 - Pour chaque écran à visualiser, construire une consigne de génération combinant : la description de l'écran (`SCREENS.md` — objectif, éléments, actions) + les tokens/composants pertinents de `DESIGN.md` (couleurs, typo, style des composants) — pour que Stitch génère un écran cohérent avec la direction déjà actée, pas une esthétique nouvelle.
 - Présenter le résultat, itérer avec l'utilisateur si besoin (ajustements de style, de layout).
 - Traiter les écrans un par un plutôt que de tout générer d'un coup, pour permettre l'ajustement au fur et à mesure.

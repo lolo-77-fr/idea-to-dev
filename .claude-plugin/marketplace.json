@@ -8,7 +8,7 @@
     {
       "name": "idea-to-dev",
       "source": "./",
-      "description": "Pipeline complet idée → dev : brainstorm, product-brief, prd, ui-screens, ui-design, cdc-technique, dev-loop, dev-memory, mvp-check, ui-preview, gtm, et l'orchestrateur idea-to-dev.",
+      "description": "Pipeline complet idée → dev : brainstorm, product-brief, prd, ui-screens, ui-design, cdc-technique, dev-loop, dev-memory, recette, ui-preview, gtm, et l'orchestrateur idea-to-dev.",
       "version": "1.0.0"
     }
   ]

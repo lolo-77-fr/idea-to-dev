@@ -9,6 +9,7 @@ A set of Claude skills (pure Markdown prompts, no code, no build/test tooling) t
 - `skills/<name>/SKILL.md` — source of truth for each skill (YAML frontmatter `name` + `description`, then the body).
 - `packaged/<name>.skill` — zip archives for upload to Claude.ai, each containing `<name>/SKILL.md`.
 - `README.md` — user-facing overview, pipeline table, install instructions.
+- `.claude-plugin/` — `marketplace.json` + `plugin.json`: the repo is a Claude Code plugin marketplace shipping all skills as one plugin (`/plugin install idea-to-dev@idea-to-dev`). Their descriptions list the skills — update them when adding/removing one, and bump `version` on release.
 
 ## Pipeline structure
 
@@ -18,7 +19,7 @@ Off-sequence skills:
 - `idea-to-dev` — orchestrator; detects starting case (A: existing code without docs, B: new feature → `.idea-to-dev/[nom-feature]/` subfolder, C: out-of-pipeline drift → reconciliation), chains steps with explicit user confirmation, adapts the end depending on chat vs coding-agent context.
 - `recette` — QA at milestones (per-brique and full pre-delivery): conformity, security, inconsistencies, robustness → `RECETTE.md`, anomalies become corrective tasks in `TASKS.md`. Replaced the former `mvp-check`.
 - `ui-preview` — optional Stitch rendering between `ui-design` and `cdc-technique`; never blocks the pipeline.
-- `skills/gtm/` — frontmatter name is `gtm-bullseye` (folder name differs); post-delivery acquisition channels, not part of the pipeline.
+- `gtm` — Bullseye acquisition-channel prioritisation, post-delivery; not part of the pipeline.
 
 ## Cross-skill invariants (keep consistent when editing)
 
@@ -45,4 +46,4 @@ Check which packages are out of date:
 for f in packaged/*.skill; do n=$(basename $f .skill); unzip -p $f "$n/SKILL.md" | diff -q - skills/$n/SKILL.md >/dev/null || echo "$n stale"; done
 ```
 
-Currently `ui-design` is stale, and `ui-preview` / `gtm` have no package. When adding a skill, also update the README table.
+Currently `ui-design` is stale. When adding a skill, also update the README table and the `.claude-plugin/` descriptions.

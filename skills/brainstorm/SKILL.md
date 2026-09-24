@@ -59,6 +59,7 @@ Synthétique, pas de remplissage. Structure :
 # Brainstorm — [Nom du projet/feature]
 
 Date : [date]
+Statut : brouillon <!-- brouillon → validé ; « à revoir — [cause] » si un doc amont a changé depuis -->
 
 ## Problème
 
@@ -88,6 +89,14 @@ Date : [date]
 ```
 
 Si une section n'a rien (par ex. aucune idée écartée), l'omettre plutôt que de la laisser vide.
+
+## Statut du document
+
+`BRAINSTORM.md` porte une ligne `Statut :` dans son en-tête (règle détaillée dans l'orchestrateur `idea-to-dev`, section "Statut des docs") :
+
+- écrire `Statut : brouillon` dès la première écriture du fichier, même partielle ;
+- passer à `Statut : validé` uniquement après validation explicite du doc complet par l'utilisateur ;
+- un doc en `à revoir — [cause]` (posé par la règle de répercussion quand un doc amont a changé) : le reprendre sur le point indiqué, puis le repasser à `validé` après validation.
 
 ## Emplacement des fichiers
 

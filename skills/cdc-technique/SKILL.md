@@ -91,6 +91,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 # CDC technique — [Nom du projet/feature]
 
 Date : [date]
+Statut : brouillon <!-- brouillon → validé ; « à revoir — [cause] » si un doc amont a changé depuis -->
 
 ## Stack & outils
 
@@ -134,6 +135,16 @@ Date : [date]
 ```
 
 Omettre toute section non pertinente plutôt que la laisser vide.
+
+## Statut du document
+
+`CDC.md` porte une ligne `Statut :` dans son en-tête (règle détaillée dans l'orchestrateur `idea-to-dev`, section "Statut des docs") :
+
+- écrire `Statut : brouillon` dès la première écriture du fichier, même partielle ;
+- passer à `Statut : validé` uniquement après validation explicite du doc complet par l'utilisateur **et** passage intégral de la checklist de clôture ;
+- un doc en `à revoir — [cause]` (posé par la règle de répercussion quand un doc amont a changé) : le reprendre sur le point indiqué, puis le repasser à `validé` après validation.
+
+Avant de s'appuyer sur `PRD.md`, `SCREENS.md` et `DESIGN.md`, vérifier leur statut : s'ils sont en `brouillon` ou `à revoir`, le signaler et proposer de les finaliser d'abord — sans l'imposer.
 
 ## Emplacement des fichiers
 

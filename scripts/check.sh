@@ -37,6 +37,12 @@ for i in "${!PIPELINE[@]}"; do
   m=$o; [ "$o" = Première ] && m=Premier  # « maillon » est masculin
   grep -q "^$m maillon du pipeline" "$f" || err "$n : l'intro ne dit pas « $m maillon du pipeline »"
 done
+# Les six docs d'étape (avant dev-loop) portent un statut.
+for n in brainstorm product-brief prd ui-screens ui-design cdc-technique; do
+  f="skills/$n/SKILL.md"
+  grep -q '^Statut : brouillon' "$f" || err "$n : ligne « Statut : » absente du format du doc"
+  grep -q '^## Statut du document' "$f" || err "$n : section « Statut du document » manquante"
+done
 CHAIN=$(printf '`%s` → ' "${PIPELINE[@]}"); CHAIN=${CHAIN% → }
 grep -qF "$CHAIN" skills/idea-to-dev/SKILL.md || err "idea-to-dev : la chaîne du pipeline ne correspond pas à : $CHAIN"
 

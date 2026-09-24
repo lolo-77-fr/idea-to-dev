@@ -73,6 +73,7 @@ Si user stories utilisées, les regrouper par rôle, et rester bref (le "afin de
 # PRD — [Nom du projet/feature]
 
 Date : [date]
+Statut : brouillon <!-- brouillon → validé ; « à revoir — [cause] » si un doc amont a changé depuis -->
 
 ## F-01 — [Brique 1 — nom repris du Périmètre MVP]
 
@@ -104,6 +105,16 @@ Date : [date]
 ```
 
 Omettre toute sous-section non pertinente (statuts, cas limites, user stories) plutôt que la laisser vide. Les critères d'acceptation, eux, sont obligatoires pour chaque brique.
+
+## Statut du document
+
+`PRD.md` porte une ligne `Statut :` dans son en-tête (règle détaillée dans l'orchestrateur `idea-to-dev`, section "Statut des docs") :
+
+- écrire `Statut : brouillon` dès la première écriture du fichier, même partielle ;
+- passer à `Statut : validé` uniquement après validation explicite du doc complet par l'utilisateur ;
+- un doc en `à revoir — [cause]` (posé par la règle de répercussion quand un doc amont a changé) : le reprendre sur le point indiqué, puis le repasser à `validé` après validation.
+
+Avant de s'appuyer sur `BRIEF.md`, vérifier son statut : s'il est en `brouillon` ou `à revoir`, le signaler et proposer de le finaliser d'abord — sans l'imposer.
 
 ## Emplacement des fichiers
 

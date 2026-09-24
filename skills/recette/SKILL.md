@@ -74,7 +74,7 @@ Si l'environnement propose un outil de revue de sécurité ou de code intégré 
 ## Déroulé
 
 1. **Déterminer le mode et le périmètre** (brique ou complet), l'annoncer en une phrase.
-2. **Rassembler les références** : `MEMORY.md` d'abord, puis `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, et `RECETTE.md` s'il existe (anomalies encore ouvertes à re-tester). Signaler tout doc absent et recetter sur la base de ce qui est disponible.
+2. **Rassembler les références** : `MEMORY.md` d'abord, puis `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, et `RECETTE.md` s'il existe (anomalies encore ouvertes à re-tester). Signaler tout doc absent et recetter sur la base de ce qui est disponible. Vérifier aussi leur statut : un doc de référence en `brouillon` ou `à revoir` (cf. orchestrateur, "Statut des docs") rend la conformité moins fiable — le signaler en tête de la recette et dans son journal.
 3. **Source de vérité sur l'état réel** :
    - **Avec accès au code** : inspecter le code, lancer les commandes de vérification disponibles.
    - **Sans accès au code (chat)** : prévenir que la recette sera **déclarative et partielle** — conformité uniquement, basée sur `TASKS.md`/`MEMORY.md` et ce que l'utilisateur décrit ou colle. Les axes sécurité et incohérences internes ne peuvent pas être vérifiés sérieusement sans le code : proposer de les faire dans un agent codant plutôt que de simuler un audit.

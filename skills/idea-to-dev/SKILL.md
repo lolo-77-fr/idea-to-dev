@@ -28,7 +28,8 @@ Ce skill ne refait pas le travail des skills qu'il orchestre — il les invoque 
 
 2. **Détecter l'état du projet (dans le sous-dossier concerné si cas B).** Chercher les docs existants dans `.idea-to-dev/` (ou `.idea-to-dev/[nom-feature]/`) : `BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`, `TASKS.md`, `MEMORY.md`.
    - Aucun doc / dossier absent → démarrer à `brainstorm` (en tenant compte du cas A si applicable). Le dossier sera créé par le premier skill qui écrit un fichier.
-   - Certains docs présents → reprendre à la première étape manquante (ex. `BRAINSTORM.md` + `BRIEF.md` présents → reprendre à `prd`).
+   - Certains docs présents → reprendre à la première étape **non validée** : la première étape dont le doc est absent ou en `Statut : brouillon` (ex. `BRAINSTORM.md` et `BRIEF.md` validés, `PRD.md` en brouillon → reprendre `prd` là où il s'était arrêté). Voir "Statut des docs".
+   - Un doc en `à revoir` → le signaler avec sa cause et proposer de le mettre à jour avant d'aller plus loin (sans l'imposer).
    - Tous présents → le projet est déjà passé par tout le pipeline ; informer l'utilisateur et demander ce qu'il souhaite faire (relancer une étape spécifique, passer directement à l'exécution dev via `dev-loop`/`dev-memory`, ou lancer une `recette`).
 
 3. **Proposer le mode rapide si le projet s'y prête** (critères dans la section "Mode rapide" ci-dessous) — une seule fois, sans insister.
@@ -46,6 +47,21 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-desi
 `ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels. `ui-preview` est en revanche **facultatif** : le proposer une fois après `ui-design` (une seule fois, sans insister si l'utilisateur décline), sans jamais bloquer le passage à `cdc-technique` s'il n'est pas utilisé.
 
 `dev-loop` et `dev-memory` forment un duo indissociable : une fois `TASKS.md` créé par `dev-loop`, `MEMORY.md` est **systématiquement** initialisé via `dev-memory` avant la première tâche de dev — ce n'est pas une proposition optionnelle. Voir "Pendant le dev" ci-dessous pour sa tenue.
+
+## Statut des docs (règle transverse)
+
+Les six docs d'étape (`BRAINSTORM.md`, `BRIEF.md`, `PRD.md`, `SCREENS.md`, `DESIGN.md`, `CDC.md`) portent une ligne `Statut :` dans leur en-tête. C'est ce qui permet de savoir où reprendre : un fichier qui existe n'est pas forcément un doc terminé.
+
+| Statut | Signification | Posé par |
+|---|---|---|
+| `brouillon` | Doc en cours, pas encore validé en entier | Le skill, dès la première écriture du fichier |
+| `validé` | Doc validé en entier par l'utilisateur (pour `CDC.md` : checklist de clôture passée) | Le skill, uniquement après validation explicite |
+| `à revoir — [cause]` | Un doc amont a changé depuis, sur un point qui concerne ce doc (ex. `à revoir — F-03 modifiée dans PRD.md le 2026-09-24`) | La règle de répercussion (étape 5) |
+
+- Chaque skill vérifie le statut des docs dont il dépend avant de s'appuyer dessus, et signale un doc en `brouillon` ou `à revoir` (sans bloquer si l'utilisateur veut continuer).
+- `TASKS.md`, `MEMORY.md` et `RECETTE.md` n'ont pas de statut : ce sont des docs vivants, pas des étapes que l'on valide une fois.
+- Un doc modifié à la main hors pipeline ne change pas de statut tout seul : c'est un cas de réconciliation (cas C).
+- **Docs produits avant l'introduction du statut** (aucune ligne `Statut :`) : les considérer comme `validé` s'ils sont complets, et proposer d'ajouter la ligne à la prochaine intervention sur le doc.
 
 ## Mode rapide — projets très simples
 
@@ -101,6 +117,7 @@ Mécanique, applicable par chaque skill quel qu'il soit (et rappelée dans chacu
 3. **Répercuter.** Si volontaire, mettre à jour le(s) doc(s) amont concernés en conséquence (pas seulement noter le changement dans le doc courant) — quel que soit à quelle étape on se trouve, la mise à jour remonte jusqu'au doc le plus en amont concerné (potentiellement jusqu'à `BRIEF.md`).
 4. **Consigner dans `MEMORY.md`** si le changement survient une fois `MEMORY.md` créé (donc pendant le dev) : une ligne dans "Décisions en cours de route" avec la tâche/brique concernée et l'état du doc amont (mis à jour / à mettre à jour). C'est cette trace qui permet à `recette` de reconnaître l'écart comme voulu.
 5. **Vérifier l'impact en aval par identifiants.** Partir des identifiants touchés par le changement (ex. `F-03`, `F-03.2`) et chercher où ils sont cités : écrans `E-XX` qui servent la brique, briques techniques `B-XX` qui la couvrent, tâches `T-XX` dont la vérification cite le critère. Signaler nommément ces éléments (tâches déjà faites ou à faire comprises) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
+   Côté docs, en revanche, chaque doc aval qui cite un identifiant touché (`SCREENS.md`, `DESIGN.md`, `CDC.md`) et qui n'est pas mis à jour dans la foulée passe en `Statut : à revoir — [identifiant] modifié dans [doc] le [date]`, pour que la trace survive à la fin de la session (voir "Statut des docs").
 
 Cette règle s'applique aussi bien pendant l'enchaînement séquentiel que sur un projet en reprise (cas B/C ci-dessus), et peut être déclenchée par une `recette` qui révèle un écart.
 

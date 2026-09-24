@@ -1,7 +1,7 @@
 {
   "name": "idea-to-dev",
   "displayName": "Idea to Dev",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pipeline de skills Claude pour aller d'une idée vague à un projet prêt à développer : brainstorm, cadrage produit, PRD, écrans, design, spec technique, découpage en tâches et mémoire de session.",
   "author": {
     "name": "Loïc Fichaux",

@@ -46,4 +46,4 @@ Check which packages are out of date:
 for f in packaged/*.skill; do n=$(basename $f .skill); unzip -p $f "$n/SKILL.md" | diff -q - skills/$n/SKILL.md >/dev/null || echo "$n stale"; done
 ```
 
-Currently `ui-design` is stale. When adding a skill, also update the README table and the `.claude-plugin/` descriptions.
+When adding a skill, also update the README table and the `.claude-plugin/` descriptions.

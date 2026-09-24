@@ -1,13 +1,13 @@
 {
   "name": "idea-to-dev",
   "displayName": "Idea to Dev",
-  "version": "1.1.0",
-  "description": "Pipeline de skills Claude pour aller d'une idée vague à un projet prêt à développer : brainstorm, cadrage produit, PRD, écrans, design, spec technique, découpage en tâches et mémoire de session.",
+  "version": "1.2.0",
+  "description": "Pipeline de skills Claude pour aller d'une idée vague à une app web/mobile livrée : brainstorm, cadrage produit, PRD avec critères d'acceptation, écrans, design, spec technique, découpage en tâches, mémoire de dev, tests utilisateur et recette.",
   "author": {
     "name": "Loïc Fichaux",
     "url": "https://github.com/lolo-77-fr"
   },
   "homepage": "https://github.com/lolo-77-fr/idea-to-dev",
   "repository": "https://github.com/lolo-77-fr/idea-to-dev",
-  "keywords": ["pipeline", "prd", "product", "ui", "planning", "dev-loop"]
+  "keywords": ["pipeline", "prd", "product", "ui", "planning", "dev-loop", "qa", "testing"]
 }

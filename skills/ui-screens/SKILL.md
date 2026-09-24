@@ -25,6 +25,8 @@ Les écrans découlent du PRD — si en les détaillant un écran nécessaire n'
 
 Pour chaque écran :
 
+- **Identifiant** : `E-01`, `E-02`... — stable, jamais renuméroté (un écran retiré garde son identifiant, marqué `(retiré)`).
+- **Briques** : les briques du PRD que l'écran sert (`F-01`, `F-03`...).
 - **Objectif** : à quoi sert cet écran, en une phrase.
 - **Éléments affichés** : les informations/données visibles (sans mise en page — une liste de ce qui doit être là).
 - **Actions possibles** : ce que l'utilisateur peut déclencher depuis cet écran.
@@ -50,7 +52,9 @@ Si plusieurs écrans partagent des éléments communs (navigation principale, he
 
 4. **Composants transverses.** Une fois les écrans passés en revue, vérifier s'il y a des éléments communs à en extraire dans une section dédiée.
 
-5. **Validation progressive.** Présenter chaque écran détaillé au fur et à mesure (pas tout d'un coup à la fin) pour validation/ajustement avant de passer au suivant.
+5. **Couverture du PRD.** Vérifier que chaque brique `F-XX` du PRD est servie par au moins un écran. Une brique sans interface (traitement en arrière-plan, automatisation) est légitime : la lister explicitement dans "Briques sans écran" plutôt que de la laisser implicite, pour que `cdc-technique` sache qu'elle n'a pas été oubliée.
+
+6. **Validation progressive.** Présenter chaque écran détaillé au fur et à mesure (pas tout d'un coup à la fin) pour validation/ajustement avant de passer au suivant.
 
 ## Format de SCREENS.md
 
@@ -63,7 +67,9 @@ Date : [date]
 
 - [élément] : [description, écrans concernés]
 
-## [Écran 1 — nom]
+## E-01 — [Écran 1 — nom]
+
+**Briques** : F-01, F-02
 
 **Objectif** : [...]
 
@@ -80,9 +86,13 @@ Date : [date]
 **États particuliers** <!-- si pertinent -->
 - [état] : [comportement]
 
-## [Écran 2 — ...]
+## E-02 — [Écran 2 — ...]
 
 ...
+
+## Briques sans écran <!-- si pertinent -->
+
+- F-04 — [pourquoi elle n'a pas d'interface : traitement en arrière-plan, notification seule...]
 ```
 
 Omettre toute sous-section non pertinente plutôt que la laisser vide.

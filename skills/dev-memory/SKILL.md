@@ -49,7 +49,7 @@ Dernière mise à jour : [date]
 
 ## Décisions en cours de route
 
-- **[Date] — [T-XX / brique concernée]** — [Ce qui a été décidé/changé vs prévu initialement] — [pourquoi] — Doc amont : [`CDC.md` § X mis à jour / à mettre à jour / aucun]
+- **[Date] — [identifiants concernés : T-XX, B-XX, F-XX.Y...]** — [Ce qui a été décidé/changé vs prévu initialement] — [pourquoi] — Doc amont : [`CDC.md` § X mis à jour / à mettre à jour / aucun]
 
 ## Pièges & conventions du projet
 
@@ -73,7 +73,7 @@ Omettre les sections "Debug en cours" et "Points de retour" quand elles ne sont 
 
 - **Pas de redondance avec TASKS.md** — `MEMORY.md` ne liste pas les tâches, il référence l'état courant (ex. "tâche en cours : T-18") sans dupliquer le détail.
 - **Nettoyer le "Debug en cours" une fois résolu.** Quand un bug est résolu, retirer la section "Debug en cours" correspondante et, si la résolution constitue une décision/piège notable pour la suite, en garder une trace condensée (une ligne) dans "Décisions" ou "Pièges & conventions".
-- **Garder "Décisions" synthétique.** Une ligne par décision (date + tâche/brique + quoi + pourquoi + état du doc amont). La référence à la tâche/brique et l'état du doc amont ne sont pas optionnels : c'est ce qui permet à `recette` de rattacher un écart constaté dans le code à une décision, et de repérer les docs amont restés en retard. Si le fichier devient trop long avec le temps, proposer à l'utilisateur d'archiver les décisions anciennes et non pertinentes pour la suite plutôt que de les laisser s'accumuler indéfiniment.
+- **Garder "Décisions" synthétique.** Une ligne par décision (date + identifiants + quoi + pourquoi + état du doc amont). Les identifiants (`T-XX`, `B-XX`, `F-XX.Y`, `E-XX`, `C-XX` — cf. orchestrateur `idea-to-dev`) et l'état du doc amont ne sont pas optionnels : c'est ce qui permet à `recette` de rattacher un écart constaté dans le code à une décision, et de repérer les docs amont restés en retard. Si le fichier devient trop long avec le temps, proposer à l'utilisateur d'archiver les décisions anciennes et non pertinentes pour la suite plutôt que de les laisser s'accumuler indéfiniment.
 - **Lecture systématique en début de session** sur un projet existant — avant de répondre à une demande de reprise ("où on en était", "continue", "qu'est-ce qu'on a déjà essayé"), lire `MEMORY.md` s'il existe.
 
 ## Emplacement du fichier

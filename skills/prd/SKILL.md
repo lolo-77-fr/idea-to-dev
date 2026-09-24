@@ -1,6 +1,6 @@
 ---
 name: prd
-description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit product-brief, précède ui-screens).
+description: Rédige un PRD (Product Requirements Document) détaillant le comportement fonctionnel de chaque brique du périmètre MVP — entrées/sorties, règles, cas limites, statuts/états, critères d'acceptation — à partir d'un brief produit déjà cadré. Utiliser ce skill quand l'utilisateur veut détailler le fonctionnement précis d'un projet/feature avant de passer au technique, parle de "PRD", "spec fonctionnelle", "cahier des charges fonctionnel", ou veut préciser le comportement attendu d'une brique définie en product-brief. Produit un fichier PRD.md. Troisième étape du pipeline idée → dev (suit product-brief, précède ui-screens).
 ---
 
 # PRD (Product Requirements Document)
@@ -27,6 +27,23 @@ Pour chaque brique du périmètre MVP, détailler :
 - **Règles** : logique métier, conditions, validations.
 - **Statuts/états** (si pertinent) : cycle de vie d'un élément (ex. "à valider" → "validé" → "publié").
 - **Cas limites** : erreurs, absence de données, échecs — uniquement ceux qui ont un enjeu réel pour ce projet.
+- **Critères d'acceptation** : la liste des conditions qui permettent de dire "cette brique est faite et conforme" (voir ci-dessous).
+
+### Identifiants
+
+Chaque brique reçoit un identifiant `F-01`, `F-02`... dans l'ordre du Périmètre MVP, et chaque critère d'acceptation un sous-identifiant `F-01.1`, `F-01.2`... Ces identifiants sont repris par tous les docs suivants (`SCREENS.md`, `CDC.md`, `TASKS.md`, `MEMORY.md`, `RECETTE.md`) pour relier un écran, une brique technique, une tâche ou une anomalie à la brique fonctionnelle concernée.
+
+Ils sont **stables** : ne jamais renuméroter. Une brique ajoutée prend le numéro suivant ; une brique retirée garde son identifiant, marqué `(retirée)`, pour que les références existantes ne pointent pas sur autre chose.
+
+### Critères d'acceptation
+
+C'est la partie du PRD que `dev-loop` transforme en vérifications et que `recette` contrôle dans le code. Chaque critère est :
+
+- **observable** du point de vue de l'utilisateur ou du système (ce qu'on voit, ce qui est enregistré, ce qui est envoyé) — pas un détail d'implémentation ;
+- **binaire** : on peut répondre oui/non sans interprétation ("le draft est créé en statut `à valider`", pas "la génération fonctionne bien") ;
+- **ancré dans les règles et cas limites** de la brique : chaque règle ou cas limite qui compte a au moins un critère correspondant.
+
+Viser 2 à 6 critères par brique. Au-delà, la brique est probablement trop grosse et mérite d'être scindée.
 
 ### User stories — uniquement si pertinent
 
@@ -43,7 +60,7 @@ Si user stories utilisées, les regrouper par rôle, et rester bref (le "afin de
 2. **Brique par brique.** Pour chaque brique :
    - Reformuler en 1-2 phrases ce qu'elle doit faire (rappel du brief).
    - Poser les questions nécessaires sur son comportement précis — une à la fois, avec recommandation.
-   - Une fois clair, rédiger la section correspondante.
+   - Une fois clair, rédiger la section correspondante, avec son identifiant `F-XX` et ses critères d'acceptation. Proposer les critères plutôt que de les demander : l'utilisateur corrige plus vite une liste existante qu'il n'en écrit une.
 
 3. **Détecter les rôles multiples.** Si en discutant il apparaît que plusieurs types d'utilisateurs/parcours existent, le signaler et proposer le format user story pour ces parties — sinon rester en description fonctionnelle.
 
@@ -56,7 +73,7 @@ Si user stories utilisées, les regrouper par rôle, et rester bref (le "afin de
 
 Date : [date]
 
-## [Brique 1 — nom repris du Périmètre MVP]
+## F-01 — [Brique 1 — nom repris du Périmètre MVP]
 
 [Rappel en 1 phrase de ce qu'elle fait]
 
@@ -72,7 +89,11 @@ Date : [date]
 **Cas limites** <!-- si pertinent -->
 - [cas] → [comportement attendu]
 
-## [Brique 2 — ...]
+**Critères d'acceptation**
+- **F-01.1** — [condition observable et binaire]
+- **F-01.2** — [...]
+
+## F-02 — [Brique 2 — ...]
 
 ...
 
@@ -81,7 +102,7 @@ Date : [date]
 - En tant que [rôle], je veux [action] [, afin de [bénéfice]]
 ```
 
-Omettre toute sous-section non pertinente (statuts, cas limites, user stories) plutôt que la laisser vide.
+Omettre toute sous-section non pertinente (statuts, cas limites, user stories) plutôt que la laisser vide. Les critères d'acceptation, eux, sont obligatoires pour chaque brique.
 
 ## Emplacement des fichiers
 

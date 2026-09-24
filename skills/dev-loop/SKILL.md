@@ -9,7 +9,7 @@ Septième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-t
 
 ## Posture
 
-- **Détecter `CDC.md`.** S'il existe, partir du "Découpage technique" pour décomposer chaque brique en micro-tâches. S'il n'existe pas, le signaler et proposer `cdc-technique` d'abord (sans imposer).
+- **Détecter `CDC.md`.** S'il existe, partir du "Découpage technique" pour décomposer chaque brique `B-XX` en micro-tâches, en s'appuyant sur les critères d'acceptation (`F-XX.Y`) du `PRD.md` pour les briques `F-XX` qu'elle couvre. S'il n'existe pas, le signaler et proposer `cdc-technique` d'abord (sans imposer).
 - **Granularité fine, inspirée de Superpowers** : chaque tâche doit être réalisable en 2-5 minutes par un agent codant sans contexte projet préalable. Si une tâche semble plus grosse, la découper davantage plutôt que de la laisser vague.
 - **Concret, pas de pseudo-code.** Chaque tâche précise : quoi faire, où (chemin de fichier exact ou à créer), et comment vérifier que c'est fait (test, commande, comportement observable) — mais sans écrire le code lui-même (ça reste le travail de l'IA codante/Antigravity).
 - **Respecter les dépendances du CDC.** L'ordre des tâches suit les dépendances identifiées dans "Découpage technique" (ex. "Base Notion → tous les workflows").
@@ -33,6 +33,8 @@ Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCR
 
 4. **Critères de vérification.** Pour chaque tâche, formuler un critère simple et observable de "c'est fait" (ex. "la table existe et accepte une insertion test", "le webhook répond 200 sur un appel de test", "le composant s'affiche sans erreur console").
 
+   **Rattacher aux critères d'acceptation.** Quand la vérification d'une tâche prouve un critère d'acceptation du PRD, citer son identifiant (ex. "Vérification : un draft généré apparaît en statut `à valider` — F-02.1"). Pour chaque brique `B-XX`, chaque critère `F-XX.Y` des briques fonctionnelles qu'elle couvre doit être prouvé par au moins une tâche. Signaler à l'utilisateur les critères qui ne le sont pas : soit une tâche manque, soit le critère ne pourra être vérifié qu'à la recette — le dire explicitement.
+
 5. **Validation progressive — signaler ce qui mérite un avis.** Présenter le découpage brique par brique, mais ne pas se limiter à annoncer le nombre de tâches ("10 tâches, ça te va ?"). Pour chaque brique présentée, signaler explicitement s'il y a :
    - une tâche dont la granularité est douteuse (trop grosse pour 2-5 min, ou au contraire trop fine pour avoir du sens isolément) ;
    - une hypothèse technique non vérifiée sur laquelle repose plusieurs tâches (ex. "T-10 à T-16 supposent qu'on peut stocker une date côté n8n — à confirmer") ;
@@ -50,19 +52,23 @@ Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCR
 Date de création : [date]
 Dernière mise à jour : [date]
 
-## [Brique 1 — nom repris du Découpage technique CDC]
+## B-01 — [Brique 1 — nom repris du Découpage technique CDC]
+
+Couvre : F-01, E-01, C-01
 
 - [ ] **T-01** — [Action concrète]
   - Fichier(s) : `chemin/exact` (à créer / existant)
-  - Vérification : [critère observable]
+  - Vérification : [critère observable] [— F-01.1 si la tâche prouve un critère d'acceptation]
 - [ ] **T-02** — [...]
 
-## [Brique 2 — ...]
+## B-02 — [Brique 2 — ...]
 
 - [ ] **T-XX** — ...
 ```
 
 Statuts possibles par tâche : `[ ]` à faire, `[~]` en cours, `[x]` fait. Utiliser ces marqueurs simples pour rester scannable.
+
+Les numéros `T-XX` sont stables et continus sur tout le fichier : une tâche ajoutée prend le numéro suivant, même si elle s'insère au milieu d'une brique ; une tâche supprimée est barrée (`~~T-07~~ — supprimée : [raison]`) plutôt qu'effacée, car `MEMORY.md` et `RECETTE.md` peuvent y faire référence. Une tâche corrective issue de la recette cite l'anomalie traitée (ex. "T-31 — Corriger A-04 : ...").
 
 ## Gestion de l'avancement (sessions suivantes)
 

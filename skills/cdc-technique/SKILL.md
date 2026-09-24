@@ -31,7 +31,7 @@ Le "Découpage technique" doit correspondre exactement au périmètre du PRD, de
 Le CDC doit être directement exploitable comme contexte pour Antigravity/Claude Code, donc :
 
 - **Précision concrète** : noms de technologies/versions, conventions de nommage, chemins/structure de fichiers si déjà connus, plutôt que des généralités ("une base de données" → "PostgreSQL, table `veille_items`").
-- **Référencer le PRD, SCREENS.md et DESIGN.md** : pour chaque brique technique, indiquer à quelle section du PRD elle correspond ; pour l'architecture front, indiquer à quel(s) écran(s) de `SCREENS.md` et à quels tokens/composants de `DESIGN.md` elle correspond — pour que l'IA codante puisse croiser les documents sans ambiguïté.
+- **Référencer par identifiants** : chaque brique technique cite les briques du PRD (`F-XX`), les écrans (`E-XX`) et les composants (`C-XX`) qu'elle couvre — pour que l'IA codante puisse croiser les documents sans ambiguïté, et que `dev-loop` et `recette` retrouvent ce que chaque brique doit satisfaire.
 - **Pas de pseudo-code ni d'implémentation complète** : le CDC cadre les choix et la structure, `dev-loop` découpera ensuite en tâches précises avec le code/les prompts.
 
 ## Sections du CDC
@@ -46,7 +46,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 
 4. **Intégrations** — APIs externes, authentification, webhooks, limites connues (rate limits, quotas) à anticiper.
 
-5. **Découpage technique** — grandes briques techniques à développer (peut préfigurer les futurs tickets de `dev-loop`), avec dépendances entre elles si pertinent (ex. "la base Notion doit exister avant le workflow n8n de génération"). Doit couvrir toutes les briques du PRD, tous les écrans de `SCREENS.md` ET les composants de `DESIGN.md` — aucun ne doit rester sans brique technique correspondante.
+5. **Découpage technique** — grandes briques techniques à développer, identifiées `B-01`, `B-02`... (stables, jamais renumérotées ; ce sont les sections de `TASKS.md` et l'unité de la recette de brique), avec pour chacune ce qu'elle couvre (`F-XX`, `E-XX`, `C-XX`) et ses dépendances envers d'autres briques si pertinent (ex. "la base Notion doit exister avant le workflow n8n de génération"). Doit couvrir toutes les briques du PRD, tous les écrans de `SCREENS.md` ET les composants de `DESIGN.md` — aucun ne doit rester sans brique technique correspondante.
 
 6. **Points à trancher / risques techniques** — décisions encore ouvertes nécessitant un choix avant de commencer le dev, ou risques techniques identifiés (ex. "n8n en v2.3.4, vérifier compatibilité avec tel node avant de s'engager sur cette approche").
 
@@ -60,7 +60,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 
 2. **Stack & architecture d'abord — revue critique obligatoire.** Avant de figer la stack et l'architecture générale, passer chaque choix structurant par les questions de challenge (version/compatibilité, adéquation, point de rigidité — voir Posture). Ne pas valider une section "Stack & outils" sans avoir explicitement testé au moins les points qui semblent les plus susceptibles de poser problème en pratique (versions anciennes, outils choisis par habitude, dépendances externes).
 
-3. **Brique par brique et écran par écran (découpage technique).** Pour chaque brique fonctionnelle du PRD et chaque écran de `SCREENS.md`, déterminer comment elle/il se traduit techniquement, en référençant la section PRD ou l'écran correspondant.
+3. **Brique par brique et écran par écran (découpage technique).** Pour chaque brique fonctionnelle du PRD et chaque écran de `SCREENS.md`, déterminer comment elle/il se traduit techniquement, en lui attribuant un identifiant `B-XX` et en listant les `F-XX`/`E-XX`/`C-XX` qu'elle couvre.
 
 4. **Modèle de données — évaluer la pertinence.** Si plusieurs entités/relations émergent naturellement, documenter le modèle. Sinon, passer directement.
 
@@ -73,7 +73,7 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
    - Architecture claire côté back ET côté front (aucune des deux ignorée).
    - Modèle de données (si applicable) couvrant tous les écrans de `SCREENS.md` qui affichent/manipulent des données.
    - Toutes les intégrations externes identifiées, avec limites connues notées.
-   - Chaque brique du PRD, chaque écran de `SCREENS.md` ET chaque composant de `DESIGN.md` a une contrepartie dans le "Découpage technique" — aucun oubli.
+   - **Couverture vérifiée par identifiants** : lister tous les `F-XX` du PRD, `E-XX` de `SCREENS.md` et `C-XX` de `DESIGN.md` (hors éléments `(retiré)`), et vérifier que chacun apparaît dans au moins une brique `B-XX`. Présenter à l'utilisateur la liste des identifiants non couverts, ou dire explicitement qu'il n'y en a aucun — pas de "tout est couvert" sans avoir fait la vérification.
    - Aucun point flou ou "TODO" resté ouvert sur une brique du périmètre MVP (un point ouvert légitime va dans "Points à trancher / risques", pas laissé implicite).
 
    Si la checklist ne passe pas intégralement, ne pas proposer `dev-loop` — retourner sur les points manquants avec l'utilisateur.
@@ -105,8 +105,9 @@ Date : [date]
 
 ## Découpage technique
 
-- [Brique technique 1] — [réf. PRD section X / écran Y] — [dépendances si pertinent]
-- [Brique technique 2] — [...]
+- **B-01 — [Brique technique 1]** — Couvre : F-01, E-01, C-01 — Dépend de : [B-XX / aucune]
+  [1-2 phrases : ce qui est construit]
+- **B-02 — [Brique technique 2]** — [...]
 
 ## Points à trancher / risques
 

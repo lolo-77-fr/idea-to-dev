@@ -45,6 +45,24 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-desi
 
 `dev-loop` et `dev-memory` forment un duo indissociable : une fois `TASKS.md` créé par `dev-loop`, `MEMORY.md` est **systématiquement** initialisé via `dev-memory` avant la première tâche de dev — ce n'est pas une proposition optionnelle. Voir "Pendant le dev" ci-dessous pour sa tenue.
 
+## Identifiants (règle transverse)
+
+Les docs du pipeline se référencent par identifiants, pour que la couverture (`cdc-technique`), la vérification (`dev-loop`), la conformité (`recette`) et l'analyse d'impact d'un changement (ci-dessous) reposent sur des liens explicites plutôt que sur des noms de sections :
+
+| Identifiant | Défini dans | Désigne | Cité par |
+|---|---|---|---|
+| `F-01` | `PRD.md` | brique fonctionnelle | SCREENS, CDC, TASKS, MEMORY, RECETTE |
+| `F-01.1` | `PRD.md` | critère d'acceptation de la brique | TASKS (vérifications), RECETTE |
+| `E-01` | `SCREENS.md` | écran | DESIGN, CDC, RECETTE |
+| `C-01` | `DESIGN.md` | composant | CDC, RECETTE |
+| `B-01` | `CDC.md` | brique technique (section de `TASKS.md`, unité de la recette de brique) | TASKS, MEMORY, RECETTE |
+| `T-01` | `TASKS.md` | tâche | MEMORY, RECETTE |
+| `A-01` | `RECETTE.md` | anomalie | TASKS (tâches correctives), MEMORY |
+
+Règles communes : un identifiant est **stable** (jamais renuméroté) ; un élément ajouté prend le numéro suivant ; un élément retiré garde son identifiant, marqué `(retiré)` — pour qu'aucune référence existante ne se mette à pointer sur autre chose.
+
+**Docs produits avant l'introduction des identifiants** (reprise d'un projet, cas B/C) : proposer de les numéroter en suivant l'ordre existant des sections, et d'ajouter les critères d'acceptation manquants au PRD, avant de lancer `dev-loop` ou une `recette` — sans eux, la couverture et la conformité retombent sur des correspondances de noms, moins fiables.
+
 ## Répercussion des changements (règle transverse)
 
 À n'importe quelle étape du pipeline, un besoin peut apparaître qui dépasse ou contredit ce qu'un doc amont déjà produit avait défini (le scope évolue naturellement au fil de la réflexion — ce n'est pas un problème en soi). Le problème, c'est quand cette évolution reste silencieuse et que les docs amont ne sont pas mis à jour : les étapes suivantes (et un futur agent codant) travaillent alors sur une base obsolète.
@@ -55,7 +73,7 @@ Mécanique, applicable par chaque skill quel qu'il soit (et rappelée dans chacu
 2. **Confirmer.** Demander à l'utilisateur si c'est une évolution volontaire ou s'il faut recadrer pour rester dans le périmètre initial.
 3. **Répercuter.** Si volontaire, mettre à jour le(s) doc(s) amont concernés en conséquence (pas seulement noter le changement dans le doc courant) — quel que soit à quelle étape on se trouve, la mise à jour remonte jusqu'au doc le plus en amont concerné (potentiellement jusqu'à `BRIEF.md`).
 4. **Consigner dans `MEMORY.md`** si le changement survient une fois `MEMORY.md` créé (donc pendant le dev) : une ligne dans "Décisions en cours de route" avec la tâche/brique concernée et l'état du doc amont (mis à jour / à mettre à jour). C'est cette trace qui permet à `recette` de reconnaître l'écart comme voulu.
-5. **Vérifier l'impact sur `TASKS.md`.** Si le changement survient après que `dev-loop` a produit des tâches, signaler nommément les tâches potentiellement concernées (déjà faites ou à faire) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
+5. **Vérifier l'impact en aval par identifiants.** Partir des identifiants touchés par le changement (ex. `F-03`, `F-03.2`) et chercher où ils sont cités : écrans `E-XX` qui servent la brique, briques techniques `B-XX` qui la couvrent, tâches `T-XX` dont la vérification cite le critère. Signaler nommément ces éléments (tâches déjà faites ou à faire comprises) — sans les marquer automatiquement à revoir. C'est à l'utilisateur de trancher au cas par cas.
 
 Cette règle s'applique aussi bien pendant l'enchaînement séquentiel que sur un projet en reprise (cas B/C ci-dessus), et peut être déclenchée par une `recette` qui révèle un écart.
 

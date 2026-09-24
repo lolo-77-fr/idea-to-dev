@@ -11,8 +11,8 @@ Ne fait pas partie de l'enchaînement séquentiel du pipeline. Ne s'utilise pas 
 
 ## Deux modes
 
-- **Recette de brique** — déclenchée quand toutes les tâches d'une brique de `TASKS.md` sont `[x]`. Périmètre limité à cette brique : les fichiers listés dans ses tâches, les sections PRD/écrans/composants qu'elle couvre (cf. références du "Découpage technique" de `CDC.md`). Axes : conformité, sécurité et robustesse de la brique ; incohérences limitées à ce qu'elle touche. Rapide, pour attraper les problèmes tant que le contexte est frais.
-- **Recette complète** — avant de considérer le projet/feature livré. Tout le périmètre, les quatre axes, plus : cohérence entre briques (conventions, gestion d'erreurs, nommage), re-test de toutes les anomalies encore ouvertes des recettes de brique, audit des dépendances et des secrets à l'échelle du dépôt. Se conclut par un verdict livrable / non livrable.
+- **Recette de brique** — déclenchée quand toutes les tâches d'une brique de `TASKS.md` sont `[x]`. Périmètre limité à cette brique `B-XX` : les fichiers listés dans ses tâches, et les briques fonctionnelles, écrans et composants qu'elle couvre (ligne "Couvre : F-XX, E-XX, C-XX" du "Découpage technique" de `CDC.md`). Axes : conformité, sécurité et robustesse de la brique ; incohérences limitées à ce qu'elle touche. Rapide, pour attraper les problèmes tant que le contexte est frais.
+- **Recette complète** — avant de considérer le projet/feature livré. Tout le périmètre (tous les `F-XX.Y`, `E-XX`, `C-XX` non retirés), les quatre axes, plus : cohérence entre briques (conventions, gestion d'erreurs, nommage), re-test de toutes les anomalies encore ouvertes des recettes de brique, audit des dépendances et des secrets à l'échelle du dépôt. Se conclut par un verdict livrable / non livrable.
 
 Si l'utilisateur ne précise pas, déduire le mode du contexte (brique qui vient d'être terminée → recette de brique ; toutes les tâches faites ou demande de "livraison" → recette complète) et l'annoncer.
 
@@ -41,9 +41,9 @@ Si `MEMORY.md` est absent alors que le dev est avancé, le signaler : sans lui, 
 
 ### 1. Conformité
 
-- **Fonctionnalités** : pour chaque brique du PRD dans le périmètre, le comportement, les règles et les statuts décrits sont-ils implémentés tels quels ?
-- **Écrans** : pour chaque écran de `SCREENS.md` dans le périmètre, les éléments affichés, actions, navigation et états particuliers (vide, erreur, chargement) sont-ils présents ?
-- **Design system** : les tokens de `DESIGN.md` sont-ils réellement utilisés (variables CSS, thème) plutôt que des valeurs codées en dur ; les composants prévus existent-ils avec leurs états ? Sans accès au rendu visuel, se limiter à ce que le code permet de constater.
+- **Fonctionnalités** : pour chaque brique `F-XX` du périmètre, vérifier **chaque critère d'acceptation `F-XX.Y` un par un** dans le code (ou en exécutant l'application si possible) — c'est le cœur de la conformité. Puis vérifier que le comportement, les règles et les statuts décrits dans le PRD sont implémentés tels quels. Une tâche `[x]` dont la vérification cite un critère n'est pas une preuve : reconstater le critère.
+- **Écrans** : pour chaque écran `E-XX` du périmètre, les éléments affichés, actions, navigation et états particuliers (vide, erreur, chargement) sont-ils présents ?
+- **Design system** : les tokens de `DESIGN.md` sont-ils réellement utilisés (variables CSS, thème) plutôt que des valeurs codées en dur ; les composants `C-XX` prévus existent-ils avec leurs états, dans les écrans listés en "Utilisé dans" ? Sans accès au rendu visuel, se limiter à ce que le code permet de constater.
 
 ### 2. Sécurité
 
@@ -105,7 +105,7 @@ Verdict courant : [Livrable / Non livrable — N bloquantes, N majeures ouvertes
 
 | ID | Sévérité | Axe | Périmètre | Constat | Attendu (réf.) | Emplacement | Statut | Tâche |
 |---|---|---|---|---|---|---|---|---|
-| A-01 | Bloquante | Sécurité | [Brique X] | [ce qui est constaté] | [ce qui était attendu — réf. PRD/SCREENS/CDC/MEMORY] | `chemin/fichier.php:42` | ouverte | T-31 |
+| A-01 | Bloquante | Sécurité | B-02 | [ce qui est constaté] | [ce qui était attendu — réf. F-02.1 / E-03 / C-02 / CDC / MEMORY] | `chemin/fichier.php:42` | ouverte | T-31 |
 
 ## Dette de documentation <!-- décisions consignées dans MEMORY.md mais non répercutées -->
 
@@ -113,8 +113,10 @@ Verdict courant : [Livrable / Non livrable — N bloquantes, N majeures ouvertes
 
 ## Journal des passages
 
-### [date] — Recette de brique : [Brique X]
+### [date] — Recette de brique : B-02 — [nom]
 - Axes couverts : conformité, sécurité, robustesse
+- Critères d'acceptation : F-02.1 ✅, F-02.2 ✅, F-02.3 ❌ (A-03), F-04.1 ⚠️ non vérifiable sans [données/accès] — liste complète, pas seulement les échecs
+- Écrans / composants : E-03 ✅, C-02 ⚠️ (A-05)
 - Catégories sécurité vérifiées sans problème : [...]
 - Résultat : A-01 à A-04 ouvertes, A-02 re-testée vérifiée
 

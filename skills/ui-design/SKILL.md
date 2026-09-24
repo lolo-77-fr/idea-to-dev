@@ -33,6 +33,9 @@ Si en définissant un composant un besoin de comportement/écran apparaît qui n
 
 Uniquement les composants qui apparaissent réellement dans `SCREENS.md` — pas une bibliothèque exhaustive théorique. Pour chaque composant :
 
+- **Identifiant** : `C-01`, `C-02`... — stable, jamais renuméroté (un composant retiré garde son identifiant, marqué `(retiré)`).
+- **Utilisé dans** : les écrans concernés (`E-01`, `E-03`...) — c'est ce qui permet à `cdc-technique` et à `recette` de relier un composant aux écrans où il doit apparaître.
+
 - **Apparence** : à quoi il ressemble (couleurs/tokens utilisés, forme).
 - **États** : default, hover/focus, disabled, erreur — uniquement les états pertinents pour ce composant dans ce projet.
 - **Variantes** (si pertinent) : ex. bouton primaire vs secondaire vs destructeur.
@@ -80,7 +83,9 @@ Identité : [libre / basée sur charte existante — laquelle]
 
 ## Composants
 
-### [Composant 1 — ex. Bouton]
+### C-01 — [Composant 1 — ex. Bouton]
+
+**Utilisé dans** : E-01, E-02
 
 **Apparence** : [...]
 
@@ -92,7 +97,7 @@ Identité : [libre / basée sur charte existante — laquelle]
 **Variantes** <!-- si pertinent -->
 - [...]
 
-### [Composant 2 — ...]
+### C-02 — [Composant 2 — ...]
 
 ...
 ```

@@ -12,7 +12,7 @@ Huitième maillon du pipeline "idée → dev". Maintient `MEMORY.md`, un fichier
 Trois problèmes concrets qu'il adresse :
 
 1. **Dilution du contexte sur une longue conversation** (ex. session de debug qui s'étire) — l'agent finit par oublier ce qui a déjà été essayé, retente les mêmes pistes, ou perd de vue une contrainte mentionnée 50 messages plus tôt.
-2. **Perte de contexte entre sessions** — à la reprise, un agent sans `MEMORY.md` peut re-débattre une décision déjà tranchée (et documentée nulle part d'autre), ou ignorer un piège déjà identifié (ex. "le node Anthropic natif ne marche pas en v2.3.4").
+2. **Perte de contexte entre sessions** — à la reprise, un agent sans `MEMORY.md` peut re-débattre une décision déjà tranchée (et documentée nulle part d'autre), ou ignorer un piège déjà identifié (ex. "telle librairie ne fonctionne pas avec la version du framework utilisée").
 3. **Distinguer une déviation volontaire d'une erreur** — le code finit toujours par s'écarter un peu du `CDC.md`/`TASKS.md` initial. Le skill `recette` lit `MEMORY.md` pour savoir quels écarts ont été décidés (et ne sont donc pas des anomalies) : une déviation non consignée ici sera remontée comme anomalie.
 
 `MEMORY.md` n'est pas un journal exhaustif — c'est un filet de sécurité contre la répétition, l'oubli et les déviations non tracées.

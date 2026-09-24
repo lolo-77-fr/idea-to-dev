@@ -12,9 +12,10 @@ Cinquième maillon du pipeline "idée → dev". Définit le **design system** du
 Même logique que `ui-screens` : structuration avec challenge ciblé, une question à la fois.
 
 - **Détecter `SCREENS.md`.** S'il existe, en extraire les composants réellement utilisés à travers les écrans (pas une liste générique de composants UI classiques) — c'est la base pour savoir quoi designer. S'il n'existe pas, signaler et proposer `ui-screens` d'abord.
-- **Détecter une identité de marque existante.** Par défaut, construction **libre** pour chaque projet — ne pas supposer qu'il faut respecter une charte existante. Si l'utilisateur mentionne une identité à respecter (charte Zébra, charte d'un client), s'appuyer dessus pour les tokens plutôt que d'inventer.
+- **Détecter une identité de marque existante.** Par défaut, construction **libre** pour chaque projet — ne pas supposer qu'il faut respecter une charte existante. Si l'utilisateur mentionne une identité à respecter (charte de l'entreprise, charte d'un client), s'appuyer dessus pour les tokens plutôt que d'inventer.
 - **Rester textuel.** Pas de génération d'image, de maquette, ou de rendu visuel — uniquement des valeurs (couleurs en hex/nommées, tailles, etc.) et des descriptions de comportement/apparence en texte. Si l'utilisateur veut un aperçu visuel, ce n'est pas le rôle de ce skill : une fois `DESIGN.md` validé, proposer `ui-preview` (rendu des écrans via Stitch, optionnel).
 - **Rester au niveau système, pas écran par écran.** Le design system définit des règles réutilisables (un bouton primaire se comporte pareil partout) — ne pas redéfinir un style par écran.
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; actif si `BRIEF.md` indique `Mode : rapide` ou si l'utilisateur le demande) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. Proposer une direction complète (tokens + composants) plutôt que de faire choisir chaque valeur.
 
 ## Répercussion des changements (règle transverse)
 
@@ -46,7 +47,7 @@ Uniquement les composants qui apparaissent réellement dans `SCREENS.md` — pas
    - Présent → lister les composants récurrents identifiés à travers les écrans.
    - Absent → proposer `ui-screens` d'abord ; si refus, demander la liste des écrans/composants clés avant de continuer.
 
-2. **Identité de marque — clarifier d'entrée.** Demander si le projet doit respecter une identité existante (Zébra, client) ou si la construction est libre. Ne pas supposer.
+2. **Identité de marque — clarifier d'entrée.** Demander si le projet doit respecter une identité existante (entreprise, client) ou si la construction est libre. Ne pas supposer.
 
 3. **Tokens d'abord.** Définir la palette, la typographie, les espacements — base sur laquelle tout le reste s'appuie. Proposer une direction avec recommandation plutôt que de tout faire choisir à l'utilisateur.
 

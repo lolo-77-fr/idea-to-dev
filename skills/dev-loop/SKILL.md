@@ -12,7 +12,8 @@ Septième maillon du pipeline "idée → dev". Découpe le `CDC.md` en **micro-t
 - **Détecter `CDC.md`.** S'il existe, partir du "Découpage technique" pour décomposer chaque brique `B-XX` en micro-tâches, en s'appuyant sur les critères d'acceptation (`F-XX.Y`) du `PRD.md` pour les briques `F-XX` qu'elle couvre. S'il n'existe pas, le signaler et proposer `cdc-technique` d'abord (sans imposer).
 - **Granularité fine, inspirée de Superpowers** : chaque tâche doit être réalisable en 2-5 minutes par un agent codant sans contexte projet préalable. Si une tâche semble plus grosse, la découper davantage plutôt que de la laisser vague.
 - **Concret, pas de pseudo-code.** Chaque tâche précise : quoi faire, où (chemin de fichier exact ou à créer), et comment vérifier que c'est fait (test, commande, comportement observable) — mais sans écrire le code lui-même (ça reste le travail de l'IA codante/Antigravity).
-- **Respecter les dépendances du CDC.** L'ordre des tâches suit les dépendances identifiées dans "Découpage technique" (ex. "Base Notion → tous les workflows").
+- **Respecter les dépendances du CDC.** L'ordre des tâches suit les dépendances identifiées dans "Découpage technique" (ex. "schéma de base de données → API → écrans").
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; actif si `BRIEF.md` indique `Mode : rapide` ou si l'utilisateur le demande) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. `MEMORY.md` et la boucle d'exécution s'appliquent à l'identique.
 
 ## Répercussion des changements (règle transverse)
 
@@ -33,11 +34,11 @@ Si en cours de dev un changement touche un doc amont (`BRIEF.md`, `PRD.md`, `SCR
 
 4. **Critères de vérification.** Pour chaque tâche, formuler un critère simple et observable de "c'est fait" (ex. "la table existe et accepte une insertion test", "le webhook répond 200 sur un appel de test", "le composant s'affiche sans erreur console"). Quand c'est possible, l'exprimer avec une commande de la section "Commandes & vérification" du `CDC.md` (ex. "`npm test -- import` passe"), pour que la vérification soit exécutable et pas seulement déclarative.
 
-   **Rattacher aux critères d'acceptation.** Quand la vérification d'une tâche prouve un critère d'acceptation du PRD, citer son identifiant (ex. "Vérification : un draft généré apparaît en statut `à valider` — F-02.1"). Pour chaque brique `B-XX`, chaque critère `F-XX.Y` des briques fonctionnelles qu'elle couvre doit être prouvé par au moins une tâche. Signaler à l'utilisateur les critères qui ne le sont pas : soit une tâche manque, soit le critère ne pourra être vérifié qu'à la recette — le dire explicitement.
+   **Rattacher aux critères d'acceptation.** Quand la vérification d'une tâche prouve un critère d'acceptation du PRD, citer son identifiant (ex. "Vérification : une réservation validée apparaît en statut `confirmée` — F-02.1"). Pour chaque brique `B-XX`, chaque critère `F-XX.Y` des briques fonctionnelles qu'elle couvre doit être prouvé par au moins une tâche. Signaler à l'utilisateur les critères qui ne le sont pas : soit une tâche manque, soit le critère ne pourra être vérifié qu'à la recette — le dire explicitement.
 
 5. **Validation progressive — signaler ce qui mérite un avis.** Présenter le découpage brique par brique, mais ne pas se limiter à annoncer le nombre de tâches ("10 tâches, ça te va ?"). Pour chaque brique présentée, signaler explicitement s'il y a :
    - une tâche dont la granularité est douteuse (trop grosse pour 2-5 min, ou au contraire trop fine pour avoir du sens isolément) ;
-   - une hypothèse technique non vérifiée sur laquelle repose plusieurs tâches (ex. "T-10 à T-16 supposent qu'on peut stocker une date côté n8n — à confirmer") ;
+   - une hypothèse technique non vérifiée sur laquelle repose plusieurs tâches (ex. "T-10 à T-16 supposent que l'API externe renvoie les créneaux disponibles en une seule requête — à confirmer") ;
    - un ordre/dépendance qui pourrait être discuté (ex. deux tâches qui pourraient être inversées ou fusionnées).
 
    S'il n'y a rien de particulier à signaler sur une brique, le dire brièvement plutôt que de demander une validation creuse. L'objectif est que l'utilisateur ait quelque chose de concret à challenger, pas juste à approuver passivement.

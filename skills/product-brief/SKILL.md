@@ -15,6 +15,7 @@ Moins de friction que `brainstorm` : à ce stade, l'idée a normalement déjà �
 - **Si aucun `BRAINSTORM.md` n'existe**, le signaler à l'utilisateur et proposer de lancer `brainstorm` d'abord — sans l'imposer. Si l'utilisateur préfère continuer directement, garder un niveau de challenge ciblé sur les zones manifestement floues (pas le mode incisif complet de `brainstorm`, mais ne pas remplir des cases sur des suppositions non vérifiées).
 - **Une question à la fois** quand une clarification est nécessaire, avec recommandation de Claude.
 - **Pragmatique et synthétique.** Pas de remplissage de sections pour la forme — si une section n'apporte rien pour ce projet, l'omettre.
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; sur proposition de l'orchestrateur ou demande de l'utilisateur) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. Inscrire alors `Mode : rapide` dans l'en-tête de `BRIEF.md`, pour que les étapes suivantes le sachent.
 
 ## Répercussion des changements (règle transverse)
 
@@ -28,17 +29,17 @@ Le "Périmètre MVP" de `BRIEF.md` est la référence de scope pour tout le rest
 
 2. **Vision & objectif.** Formuler en une ou deux phrases ce que le produit/projet doit accomplir et pourquoi. Si ça découle directement du brainstorm, le reformuler plutôt que le redemander.
 
-3. **Parties prenantes / utilisateurs cibles — si pertinent.** Cette section n'est incluse que si le projet implique plusieurs parties prenantes (client(s), équipes internes différentes, utilisateurs externes). Pour un projet interne solo (ex. outil personnel, tooling Zébra Tools sans utilisateur externe), l'omettre purement et simplement plutôt que de la remplir artificiellement.
+3. **Parties prenantes / utilisateurs cibles — si pertinent.** Cette section n'est incluse que si le projet implique plusieurs parties prenantes (client(s), équipes internes différentes, utilisateurs externes). Pour un projet solo sans partie prenante externe (ex. outil personnel), l'omettre purement et simplement plutôt que de la remplir artificiellement.
 
 4. **Périmètre MVP vs futur.** Distinguer clairement :
    - Ce qui doit exister pour la première version utilisable (MVP).
    - Ce qui est envisagé mais reporté (en cohérence avec le "Hors scope v1" du brainstorm s'il existe).
 
-   **Rester au niveau "quoi", pas "comment".** Le périmètre MVP liste des *capacités/briques* (ex. "pipeline de veille automatisée", "validation humaine avant publication", "génération de drafts sourcés") — pas leur comportement détaillé (statuts précis, règles de validation, champs d'une base de données...). Ce niveau de détail relève du `prd`. Si une idée de comportement émerge naturellement pendant l'échange, la noter mais la renvoyer au PRD plutôt que la développer ici.
+   **Rester au niveau "quoi", pas "comment".** Le périmètre MVP liste des *capacités/briques* (ex. "prise de rendez-vous en ligne", "rappel automatique avant le rendez-vous", "tableau de bord des réservations") — pas leur comportement détaillé (statuts précis, règles de validation, champs d'une base de données...). Ce niveau de détail relève du `prd`. Si une idée de comportement émerge naturellement pendant l'échange, la noter mais la renvoyer au PRD plutôt que la développer ici.
 
    Si le brainstorm avait déjà une section "Hors scope v1", la reprendre/affiner ici plutôt que la redéfinir de zéro.
 
-5. **Objectifs & métriques de succès.** Quelques objectifs concrets et, si possible, comment on saura que c'est un succès (métrique, seuil, ou simplement un critère qualitatif clair s'il n'y a pas de métrique chiffrée pertinente — ne pas forcer des KPIs artificiels sur un petit outil interne).
+5. **Objectifs & métriques de succès.** Quelques objectifs concrets et, si possible, comment on saura que c'est un succès (métrique, seuil, ou simplement un critère qualitatif clair s'il n'y a pas de métrique chiffrée pertinente — ne pas forcer des KPIs artificiels sur un petit projet).
 
 6. **Contraintes.** Techniques (stack existante, intégrations obligatoires), temporelles, ou autres contraintes connues qui doivent cadrer le PRD/CDC à venir.
 
@@ -50,6 +51,7 @@ Le "Périmètre MVP" de `BRIEF.md` est la référence de scope pour tout le rest
 # Brief produit — [Nom du projet/feature]
 
 Date : [date]
+Mode : rapide <!-- uniquement si le projet est en mode rapide -->
 
 ## Vision
 

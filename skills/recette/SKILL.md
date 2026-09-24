@@ -23,6 +23,7 @@ Si l'utilisateur ne précise pas, déduire le mode du contexte (brique qui vient
 - **Factuel et localisé.** Chaque anomalie pointe un emplacement précis (`fichier:ligne`, écran, route) et ce qui était attendu — pas de "la sécurité pourrait être améliorée".
 - **Sévérité honnête.** Ne pas gonfler une remarque de style en anomalie majeure, ni minimiser une faille. En cas de doute sur la réalité d'une anomalie (ex. une faille théorique non exploitable dans ce contexte), le dire plutôt que de trancher.
 - **Ne pas élargir le périmètre.** Une idée d'amélioration fonctionnelle n'est pas une anomalie — la mentionner au plus en "Remarques hors recette", sans l'ajouter aux tâches.
+- **Mode rapide** (projet très simple, `Mode : rapide` dans `BRIEF.md` — cf. orchestrateur `idea-to-dev`) : les recettes de brique deviennent optionnelles, mais la recette complète avant livraison reste obligatoire, avec ses quatre axes — l'axe sécurité n'est jamais allégé.
 
 ## Références : les docs ET `MEMORY.md`
 
@@ -49,10 +50,10 @@ Si `MEMORY.md` est absent alors que le dev est avancé, le signaler : sans lui, 
 
 Construire la liste de contrôle à partir de la **stack réelle** lue dans `CDC.md` (et confirmée dans le code), pas une checklist générique appliquée à l'aveugle. Points de départ :
 
-- **Transverse** : secrets ou credentials dans le dépôt (y compris historique récent, fichiers d'exemple, exports de workflows) ; contrôle d'accès (chaque route/action vérifie-t-elle l'identité ET les droits — un rôle peut-il accéder aux données d'un autre ?) ; validation des entrées côté serveur ; messages d'erreur qui divulguent des détails internes ; données personnelles (quoi est stocké, où, durée, exposition — RGPD) ; dépendances vulnérables (lancer l'outil d'audit de l'écosystème s'il est disponible : `composer audit`, `npm audit`, `pip-audit`...).
-- **Web (PHP/SQL/JS...)** : injection SQL (requêtes non préparées), XSS (sorties non échappées), CSRF sur les actions qui modifient des données, gestion des sessions/cookies (flags `HttpOnly`/`Secure`/`SameSite`), uploads (type, taille, emplacement exécutable), en-têtes de sécurité, configuration de prod (affichage des erreurs, fichiers sensibles accessibles).
-- **Automatisations (n8n, webhooks...)** : webhooks exposés sans authentification ni vérification de signature, credentials stockés en clair dans les workflows exportés, données sensibles envoyées à des services tiers (dont les API d'IA) sans que ce soit acté.
-- **Mobile/BaaS (Flutter/Firebase...)** : règles de sécurité de la base (lecture/écriture ouvertes), clés d'API à privilèges côté client, logique d'autorisation uniquement côté client.
+- **Transverse** : secrets ou credentials dans le dépôt (y compris historique récent, fichiers d'exemple, fichiers de configuration) ; contrôle d'accès (chaque route/action vérifie-t-elle l'identité ET les droits — un rôle peut-il accéder aux données d'un autre ?) ; validation des entrées côté serveur ; messages d'erreur qui divulguent des détails internes ; données personnelles (quoi est stocké, où, durée, exposition — RGPD) ; dépendances vulnérables (lancer l'outil d'audit de l'écosystème s'il est disponible : `composer audit`, `npm audit`, `pip-audit`...).
+- **Web (backend + frontend)** : injection SQL (requêtes non préparées), XSS (sorties non échappées), CSRF sur les actions qui modifient des données, gestion des sessions/cookies (flags `HttpOnly`/`Secure`/`SameSite`), uploads (type, taille, emplacement exécutable), en-têtes de sécurité, configuration de prod (affichage des erreurs, fichiers sensibles accessibles).
+- **Tâches de fond, webhooks & services tiers** : webhooks entrants sans authentification ni vérification de signature, clés d'API tierces exposées côté client ou dans les logs, données sensibles envoyées à des services tiers (dont les API d'IA) sans que ce soit acté.
+- **Mobile & backend-as-a-service** : règles de sécurité de la base (lecture/écriture ouvertes), clés d'API à privilèges côté client, logique d'autorisation uniquement côté client.
 
 Ne retenir que les points pertinents pour ce projet, et le dire quand une catégorie a été vérifiée sans problème (pour qu'on sache qu'elle a été couverte, et pas oubliée).
 
@@ -105,7 +106,7 @@ Verdict courant : [Livrable / Non livrable — N bloquantes, N majeures ouvertes
 
 | ID | Sévérité | Axe | Périmètre | Constat | Attendu (réf.) | Emplacement | Statut | Tâche |
 |---|---|---|---|---|---|---|---|---|
-| A-01 | Bloquante | Sécurité | B-02 | [ce qui est constaté] | [ce qui était attendu — réf. F-02.1 / E-03 / C-02 / CDC / MEMORY] | `chemin/fichier.php:42` | ouverte | T-31 |
+| A-01 | Bloquante | Sécurité | B-02 | [ce qui est constaté] | [ce qui était attendu — réf. F-02.1 / E-03 / C-02 / CDC / MEMORY] | `chemin/fichier:42` | ouverte | T-31 |
 
 ## Dette de documentation <!-- décisions consignées dans MEMORY.md mais non répercutées -->
 

@@ -15,12 +15,13 @@ Ce skill est le **garde-fou de complétude avant dev-loop** : il ne se considèr
 
 - **Détecter `PRD.md`, `SCREENS.md` et `DESIGN.md`.** S'ils existent, partir de chaque brique fonctionnelle, de chaque écran et des tokens/composants définis pour en déduire les besoins techniques (back ET front). Si `PRD.md` n'existe pas, le signaler et proposer `prd` d'abord. Si `SCREENS.md` n'existe pas, le signaler et proposer `ui-screens` d'abord (ne pas déduire l'architecture front sans lui). Si `DESIGN.md` n'existe pas, le signaler et proposer `ui-design` d'abord (ne pas improviser la structure CSS/composants front sans lui).
 - **Challenge systématique sur la stack/architecture — pas optionnel.** Avant de valider la section "Stack & outils" et "Architecture générale", passer explicitement en revue chaque choix structurant avec au moins une question de ce type, même si la réponse semble évidente :
-  - *Version/compatibilité* : l'outil/version existant supporte-t-il vraiment ce qu'on va lui demander ? (ex. "n8n v2.3.4 — le node Anthropic natif existe-t-il dans cette version, ou faut-il une alternative HTTP Request ?")
-  - *Adéquation* : est-ce le bon outil pour CE besoin, ou une habitude reprise par défaut ? (ex. "Notion comme interface de validation — un simple statut + email suffirait-il, ou Notion apporte une vraie valeur ici ?")
+  - *Version/compatibilité* : l'outil/version existant supporte-t-il vraiment ce qu'on va lui demander ? (ex. "le framework dans la version retenue gère-t-il nativement les notifications push, ou faut-il une librairie en plus ?")
+  - *Adéquation* : est-ce le bon outil pour CE besoin, ou une habitude reprise par défaut ? (ex. "un service d'authentification tiers est-il justifié ici, ou l'authentification intégrée au framework suffit-elle ?")
   - *Point de rigidité* : une fois ce choix fait, qu'est-ce qui devient difficile à changer ? Le dire explicitement.
 
   Ne pas se contenter de "noter le pourquoi" du choix de l'utilisateur — vérifier activement qu'il tient la route, même brièvement. Si tout est bon, le dire et avancer ; mais le test doit avoir été fait.
-- **S'appuyer sur le contexte de l'utilisateur.** Stack habituelle connue (PHP/PostgreSQL/vanilla JS sur o2switch pour Zébra Tools, n8n pour l'automatisation, Flutter/Firebase pour le mobile...) — proposer en cohérence avec l'existant sauf raison contraire, mais le dire explicitement si un autre choix serait objectivement meilleur pour ce cas précis.
+- **S'appuyer sur l'existant, sans le supposer.** Ne jamais présumer d'une stack : demander à l'utilisateur s'il a une stack habituelle, un hébergement imposé ou du code existant. Si c'est le cas, proposer en cohérence sauf raison contraire, mais le dire explicitement si un autre choix serait objectivement meilleur pour ce cas précis.
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; actif si `BRIEF.md` indique `Mode : rapide` ou si l'utilisateur le demande) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. Le challenge porte sur les seuls choix à risque, mais la checklist de clôture (couverture par identifiants, commandes & vérification comprises) reste intégrale.
 
 ## Répercussion des changements (règle transverse)
 
@@ -30,7 +31,7 @@ Le "Découpage technique" doit correspondre exactement au périmètre du PRD, de
 
 Le CDC doit être directement exploitable comme contexte pour Antigravity/Claude Code, donc :
 
-- **Précision concrète** : noms de technologies/versions, conventions de nommage, chemins/structure de fichiers si déjà connus, plutôt que des généralités ("une base de données" → "PostgreSQL, table `veille_items`").
+- **Précision concrète** : noms de technologies/versions, conventions de nommage, chemins/structure de fichiers si déjà connus, plutôt que des généralités ("une base de données" → "PostgreSQL, table `reservations`").
 - **Référencer par identifiants** : chaque brique technique cite les briques du PRD (`F-XX`), les écrans (`E-XX`) et les composants (`C-XX`) qu'elle couvre — pour que l'IA codante puisse croiser les documents sans ambiguïté, et que `dev-loop` et `recette` retrouvent ce que chaque brique doit satisfaire.
 - **Pas de pseudo-code ni d'implémentation complète** : le CDC cadre les choix et la structure, `dev-loop` découpera ensuite en tâches précises avec le code/les prompts.
 
@@ -40,20 +41,20 @@ Structure classique, à adapter selon le projet (omettre ce qui n'est pas pertin
 
 1. **Stack & outils** — langages, frameworks, services externes, hébergement. Pour chaque choix non trivial, noter le "pourquoi" en une phrase si ça apporte de la clarté pour l'IA codante ou pour relire plus tard.
 
-2. **Architecture générale** — comment les briques s'articulent, back ET front (ex. "n8n orchestre le pipeline, déclenché par cron + webhooks Notion ; Notion sert d'interface de validation et de stockage" côté back, "SPA React avec 3 vues routées, state géré en local" côté front si applicable). Un schéma textuel simple (liste, flux) suffit ; pas besoin de diagramme pour un projet simple. Pour la partie front, s'appuyer explicitement sur les écrans de `SCREENS.md` (routes/vues à prévoir, composants transverses identifiés) et sur `DESIGN.md` pour la structuration CSS (approche de style, comment les tokens sont implémentés — variables CSS, thème d'un framework, etc.).
+2. **Architecture générale** — comment les briques s'articulent, back ET front (ex. "API REST consommée par le front ; tâche planifiée qui envoie les rappels par email la veille du rendez-vous" côté back, "SPA React avec 3 vues routées, state géré en local" côté front si applicable). Un schéma textuel simple (liste, flux) suffit ; pas besoin de diagramme pour un projet simple. Pour la partie front, s'appuyer explicitement sur les écrans de `SCREENS.md` (routes/vues à prévoir, composants transverses identifiés) et sur `DESIGN.md` pour la structuration CSS (approche de style, comment les tokens sont implémentés — variables CSS, thème d'un framework, etc.).
 
-3. **Modèle de données** — uniquement si le projet a plusieurs entités/relations clairement identifiables (ex. tables PostgreSQL avec relations, ou base Notion avec plusieurs types d'items liés). Pour une automatisation n8n simple avec une seule base/liste sans relations, omettre cette section — le PRD décrit déjà les champs nécessaires.
+3. **Modèle de données** — uniquement si le projet a plusieurs entités/relations clairement identifiables (ex. tables SQL avec relations, ou collections liées dans une base documentaire). Pour un projet avec une seule entité sans relations, omettre cette section — le PRD décrit déjà les champs nécessaires.
 
 4. **Intégrations** — APIs externes, authentification, webhooks, limites connues (rate limits, quotas) à anticiper.
 
-5. **Découpage technique** — grandes briques techniques à développer, identifiées `B-01`, `B-02`... (stables, jamais renumérotées ; ce sont les sections de `TASKS.md` et l'unité de la recette de brique), avec pour chacune ce qu'elle couvre (`F-XX`, `E-XX`, `C-XX`) et ses dépendances envers d'autres briques si pertinent (ex. "la base Notion doit exister avant le workflow n8n de génération"). Doit couvrir toutes les briques du PRD, tous les écrans de `SCREENS.md` ET les composants de `DESIGN.md` — aucun ne doit rester sans brique technique correspondante.
+5. **Découpage technique** — grandes briques techniques à développer, identifiées `B-01`, `B-02`... (stables, jamais renumérotées ; ce sont les sections de `TASKS.md` et l'unité de la recette de brique), avec pour chacune ce qu'elle couvre (`F-XX`, `E-XX`, `C-XX`) et ses dépendances envers d'autres briques si pertinent (ex. "le schéma de base de données doit exister avant l'API de réservation"). Doit couvrir toutes les briques du PRD, tous les écrans de `SCREENS.md` ET les composants de `DESIGN.md` — aucun ne doit rester sans brique technique correspondante.
 
-6. **Commandes & vérification** — comment un agent codant vérifie son travail sans deviner. Obligatoire dès qu'il y a du code (pour une automatisation sans code, ex. workflow n8n pur, décrire à la place comment on déclenche un test et où on lit le résultat) :
+6. **Commandes & vérification** — comment un agent codant vérifie son travail sans deviner. Obligatoire :
    - **Commandes** : installer les dépendances, lancer en local, lancer les tests, lint/format, build, déployer — la commande exacte, pas "lancer les tests". Si une commande n'existe pas encore, dire dans quelle brique `B-XX` elle sera mise en place (généralement la première).
-   - **Stratégie de test, proportionnée au projet** : ce qui est testé automatiquement (et avec quel outil), ce qui est vérifié à la main, et comment. Pour un petit outil interne, "tests sur la logique métier des briques F-02 et F-03, le reste vérifié à la main" est une stratégie valable ; "pas de tests" doit être un choix explicite, pas un oubli.
+   - **Stratégie de test, proportionnée au projet** : ce qui est testé automatiquement (et avec quel outil), ce qui est vérifié à la main, et comment. Pour un petit projet, "tests sur la logique métier des briques F-02 et F-03, le reste vérifié à la main" est une stratégie valable ; "pas de tests" doit être un choix explicite, pas un oubli.
    - **Environnements & configuration** : local / prod, où vivent la configuration et les secrets (ex. `.env` non versionné + `.env.example` versionné), données de test éventuelles.
 
-7. **Points à trancher / risques techniques** — décisions encore ouvertes nécessitant un choix avant de commencer le dev, ou risques techniques identifiés (ex. "n8n en v2.3.4, vérifier compatibilité avec tel node avant de s'engager sur cette approche").
+7. **Points à trancher / risques techniques** — décisions encore ouvertes nécessitant un choix avant de commencer le dev, ou risques techniques identifiés (ex. "vérifier que l'API de paiement retenue gère les paiements récurrents avant de s'engager sur cette approche").
 
 ## Déroulé
 

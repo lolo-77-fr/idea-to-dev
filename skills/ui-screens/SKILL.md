@@ -16,6 +16,7 @@ Même logique que `prd` : structuration avec challenge ciblé, une question à l
 - **Détecter `PRD.md`.** S'il existe, en tirer la liste des écrans nécessaires à partir des briques fonctionnelles. S'il n'existe pas, le signaler et proposer `prd` d'abord (sans imposer).
 - **Rester textuel.** Pas de mise en page, pas de wireframe visuel/ASCII, pas de choix graphique (couleurs, typographie) — uniquement le contenu et le comportement de chaque écran.
 - **Ne pas élargir le périmètre.** Les écrans découlent du PRD ; si un écran semble nécessaire mais n'a pas de brique correspondante dans le PRD, le signaler comme extension potentielle plutôt que de l'ajouter silencieusement (cf. règle transverse de répercussion des changements portée par l'orchestrateur `idea-to-dev`).
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; actif si `BRIEF.md` indique `Mode : rapide` ou si l'utilisateur le demande) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. La couverture du PRD (chaque `F-XX` servie par un écran ou listée en "Briques sans écran") reste obligatoire.
 
 ## Répercussion des changements (règle transverse)
 
@@ -31,7 +32,7 @@ Pour chaque écran :
 - **Éléments affichés** : les informations/données visibles (sans mise en page — une liste de ce qui doit être là).
 - **Actions possibles** : ce que l'utilisateur peut déclencher depuis cet écran.
 - **Navigation** : d'où on arrive sur cet écran, vers où on peut aller depuis lui.
-- **États particuliers** (si pertinent) : vide, chargement, erreur — uniquement si l'écran a un enjeu réel sur ces cas (ne pas systématiser pour un outil interne simple).
+- **États particuliers** (si pertinent) : vide, chargement, erreur — uniquement si l'écran a un enjeu réel sur ces cas (ne pas systématiser pour un écran simple).
 
 ### Composants transverses
 

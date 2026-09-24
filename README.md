@@ -92,5 +92,5 @@ Chaque skill lit/écrit ses documents dans `.idea-to-dev/` à la racine du proje
 ## Usage type
 
 1. Lancer `idea-to-dev` (ou directement `brainstorm`) sur une idée de projet/feature.
-2. Le pipeline avance étape par étape, avec validation à chaque fin d'étape.
+2. Le pipeline avance étape par étape, avec validation à chaque fin d'étape. Pour un projet très simple (un seul type d'utilisateur, 3 briques et environ 4 écrans au plus, pas de paiement ni de données sensibles), l'orchestrateur propose un **mode rapide** : mêmes étapes et mêmes docs, mais chaque doc est rédigé d'un coup avec au plus 3 questions sur les points à risque.
 3. Une fois `TASKS.md` et `MEMORY.md` en place, le développement peut commencer — directement dans l'agent codant, ou via un prompt de transfert généré par `idea-to-dev` si on est parti d'un chat sans accès au code.

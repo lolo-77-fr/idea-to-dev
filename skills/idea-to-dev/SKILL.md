@@ -31,7 +31,9 @@ Ce skill ne refait pas le travail des skills qu'il orchestre — il les invoque 
    - Certains docs présents → reprendre à la première étape manquante (ex. `BRAINSTORM.md` + `BRIEF.md` présents → reprendre à `prd`).
    - Tous présents → le projet est déjà passé par tout le pipeline ; informer l'utilisateur et demander ce qu'il souhaite faire (relancer une étape spécifique, passer directement à l'exécution dev via `dev-loop`/`dev-memory`, ou lancer une `recette`).
 
-3. **Annoncer le point de départ** brièvement avant de commencer, en mentionnant le cas de figure détecté si pertinent (ex. "Je vois `.idea-to-dev/BRAINSTORM.md` et `.idea-to-dev/BRIEF.md` — on reprend à `prd`." ou "Le projet a déjà du code mais pas de `.idea-to-dev/` — on démarre à `brainstorm` en tenant compte de l'existant.").
+3. **Proposer le mode rapide si le projet s'y prête** (critères dans la section "Mode rapide" ci-dessous) — une seule fois, sans insister.
+
+4. **Annoncer le point de départ** brièvement avant de commencer, en mentionnant le cas de figure détecté si pertinent (ex. "Je vois `.idea-to-dev/BRAINSTORM.md` et `.idea-to-dev/BRIEF.md` — on reprend à `prd`." ou "Le projet a déjà du code mais pas de `.idea-to-dev/` — on démarre à `brainstorm` en tenant compte de l'existant.").
 
 ## Enchaînement
 
@@ -44,6 +46,31 @@ Pour chaque étape (`brainstorm`, `product-brief`, `prd`, `ui-screens`, `ui-desi
 `ui-screens` et `ui-design` sont **obligatoires**, y compris pour un projet à interface minimale — ne jamais les sauter ni les proposer comme optionnels. `ui-preview` est en revanche **facultatif** : le proposer une fois après `ui-design` (une seule fois, sans insister si l'utilisateur décline), sans jamais bloquer le passage à `cdc-technique` s'il n'est pas utilisé.
 
 `dev-loop` et `dev-memory` forment un duo indissociable : une fois `TASKS.md` créé par `dev-loop`, `MEMORY.md` est **systématiquement** initialisé via `dev-memory` avant la première tâche de dev — ce n'est pas une proposition optionnelle. Voir "Pendant le dev" ci-dessous pour sa tenue.
+
+## Mode rapide — projets très simples
+
+Pour un projet très simple, le déroulé standard (une question à la fois, validation section par section) coûte plus d'allers-retours qu'il n'apporte. Le mode rapide garde **les mêmes étapes, les mêmes docs et les mêmes garde-fous**, mais change la façon de les produire.
+
+**Quand le proposer** — une seule fois, au démarrage, si tous ces critères semblent réunis d'après la description de l'utilisateur (ou quand il le demande explicitement) :
+
+- un seul type d'utilisateur ;
+- un périmètre MVP de 3 briques fonctionnelles au plus et d'environ 4 écrans au plus ;
+- pas de paiement, pas de données personnelles sensibles, pas d'intégration externe critique ;
+- pas de code existant important à intégrer.
+
+Ne jamais l'imposer : l'utilisateur choisit. Le mode retenu est inscrit dans l'en-tête de `BRIEF.md` (`Mode : rapide`), que les étapes suivantes lisent.
+
+**Ce qui change**
+
+- Chaque skill rédige son doc **complet d'un coup**, à partir des docs précédents, en affichant en tête les **hypothèses retenues** pour qu'elles soient faciles à corriger.
+- **Au plus 3 questions par étape**, regroupées dans un seul message avec recommandation, uniquement sur les points à risque (ce qui changerait le périmètre, la stack ou un comportement visible). C'est la seule exception à la règle "une question à la fois".
+- **Validation du doc en une fois**, pas section par section.
+- `brainstorm` et `product-brief` peuvent être produits dans le même échange.
+- Les recettes de brique deviennent optionnelles ; la recette complète avant livraison reste obligatoire.
+
+**Ce qui ne change pas** : tous les docs sont produits, dans leur format ; `ui-screens` et `ui-design` restent obligatoires ; identifiants et critères d'acceptation ; checklist de clôture intégrale de `cdc-technique` (couverture, commandes & vérification) ; `MEMORY.md` et la boucle d'exécution de `dev-loop` ; l'axe sécurité de la recette.
+
+**Sortie du mode rapide** : si un critère cesse d'être vrai en cours de route (deuxième rôle, paiement, périmètre qui grossit...), le signaler et proposer de repasser en mode standard pour les étapes restantes — en retirant `Mode : rapide` de `BRIEF.md` si l'utilisateur accepte.
 
 ## Identifiants (règle transverse)
 

@@ -12,8 +12,9 @@ Troisième maillon du pipeline "idée → dev". Détaille le **comportement fonc
 Même logique que `product-brief` : structuration avec challenge ciblé sur le flou, pas un mode exploratoire complet.
 
 - **Détecter `BRIEF.md`.** S'il existe, partir de son "Périmètre MVP" : chaque capacité listée devient une section à détailler fonctionnellement. S'il n'existe pas, le signaler et proposer `product-brief` d'abord (sans imposer).
-- **Une question à la fois**, avec recommandation, sur les points de comportement non précisés (ex. "que se passe-t-il si la génération du draft échoue — on retente, on notifie, on laisse en attente ?").
-- **Pragmatique.** Ne pas spéculer sur des cas limites improbables pour un petit outil interne. Si une question de comportement n'a clairement aucun enjeu pour ce projet, ne pas la poser.
+- **Une question à la fois**, avec recommandation, sur les points de comportement non précisés (ex. "que se passe-t-il si le créneau est pris entre l'affichage et la validation — on bloque, on propose un autre créneau, on met en liste d'attente ?").
+- **Pragmatique.** Ne pas spéculer sur des cas limites improbables pour un petit projet. Si une question de comportement n'a clairement aucun enjeu pour ce projet, ne pas la poser.
+- **Mode rapide** (projet très simple — cf. orchestrateur `idea-to-dev` ; actif si `BRIEF.md` indique `Mode : rapide` ou si l'utilisateur le demande) : rédiger le doc complet d'un coup en affichant en tête les hypothèses retenues, poser au plus 3 questions — regroupées dans un seul message, avec recommandation — uniquement sur les points à risque, et faire valider le doc en une fois plutôt que section par section. Les identifiants et les critères d'acceptation restent obligatoires pour chaque brique.
 
 ## Répercussion des changements (règle transverse)
 
@@ -40,14 +41,14 @@ Ils sont **stables** : ne jamais renuméroter. Une brique ajoutée prend le num�
 C'est la partie du PRD que `dev-loop` transforme en vérifications et que `recette` contrôle dans le code. Chaque critère est :
 
 - **observable** du point de vue de l'utilisateur ou du système (ce qu'on voit, ce qui est enregistré, ce qui est envoyé) — pas un détail d'implémentation ;
-- **binaire** : on peut répondre oui/non sans interprétation ("le draft est créé en statut `à valider`", pas "la génération fonctionne bien") ;
+- **binaire** : on peut répondre oui/non sans interprétation ("la réservation est créée en statut `confirmée` et un email de confirmation est envoyé", pas "la réservation fonctionne bien") ;
 - **ancré dans les règles et cas limites** de la brique : chaque règle ou cas limite qui compte a au moins un critère correspondant.
 
 Viser 2 à 6 critères par brique. Au-delà, la brique est probablement trop grosse et mérite d'être scindée.
 
 ### User stories — uniquement si pertinent
 
-N'utiliser le format "En tant que [rôle], je veux [action], afin de [bénéfice]" que si le projet a **plusieurs rôles/parcours distincts** (ex. admin vs utilisateur final sur un formulaire avec deux interfaces). Pour un outil à un seul type d'utilisateur (la plupart des projets internes Zébra Tools, automatisations n8n, outils perso), ce format ajoute de la verbosité sans clarifier — privilégier la description fonctionnelle directe.
+N'utiliser le format "En tant que [rôle], je veux [action], afin de [bénéfice]" que si le projet a **plusieurs rôles/parcours distincts** (ex. admin vs utilisateur final sur un formulaire avec deux interfaces). Pour une app à un seul type d'utilisateur, ce format ajoute de la verbosité sans clarifier — privilégier la description fonctionnelle directe.
 
 Si user stories utilisées, les regrouper par rôle, et rester bref (le "afin de" peut souvent être omis s'il est évident).
 

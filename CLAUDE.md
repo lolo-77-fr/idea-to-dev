@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A set of Claude skills (pure Markdown prompts, no code, no build/test tooling) that form an "idée → dev" pipeline: taking a vague idea through progressive framing documents down to dev micro-tasks. All skill content is written in **French** — keep edits in French and match the existing tone and structure.
 
+The pipeline targets **web and mobile apps** (not automation workflows) and must stay **fully neutral**: no author, company, client, stack or hosting context baked into the skills. Examples use a generic web/mobile app (a booking app); the CDC asks the user for their stack instead of assuming one.
+
 - `skills/<name>/SKILL.md` — source of truth for each skill (YAML frontmatter `name` + `description`, then the body).
 - `packaged/<name>.skill` — zip archives for upload to Claude.ai, each containing `<name>/SKILL.md`.
 - `README.md` — user-facing overview, pipeline table, install instructions.
@@ -31,7 +33,8 @@ Skills reference each other heavily, so a change to one usually requires touchin
 - `MEMORY.md` is the register of deviations from `CDC.md`/`TASKS.md` during dev: `dev-loop` must log them (with task/brique + upstream-doc status), and `recette` uses it to tell intended deviations from anomalies. Keep `dev-loop`, `dev-memory`, `recette` and the orchestrator aligned on this.
 - **Cross-doc IDs**: `F-01`/`F-01.1` (PRD bricks / acceptance criteria), `E-01` (screens), `C-01` (components), `B-01` (CDC technical bricks = `TASKS.md` sections = per-brique recette unit), `T-01` (tasks), `A-01` (recette anomalies). Stable, never renumbered. The canonical table is in `skills/idea-to-dev/SKILL.md` ("Identifiants"); any template change in one skill must keep the references in the others valid.
 - **Execution loop**: `dev-loop` owns the in-agent loop (read MEMORY → TASKS → CDC commands, run the verification before any `[x]`, stop after two failed attempts and log to MEMORY) and the block to append to the target project's `CLAUDE.md`/`AGENTS.md`. It relies on the CDC's "Commandes & vérification" section; `recette` runs those same commands.
-- `ui-screens` and `ui-design` are mandatory/non-skippable; `cdc-technique` closes only after its completeness checklist. Don't weaken these in orchestrator edits.
+- **Mode rapide** (very simple projects, flagged by `Mode : rapide` in `BRIEF.md`): rules live in the orchestrator's "Mode rapide" section; each skill's Posture has a one-line reminder of what it changes and what stays mandatory. Keep them in sync.
+- `ui-screens` and `ui-design` are mandatory/non-skippable (including in mode rapide); `cdc-technique` closes only after its completeness checklist. Don't weaken these in orchestrator edits.
 - The `description` frontmatter drives skill triggering — keep trigger phrases ("PRD", "CDC technique", "TASKS", …) when rewording.
 
 ## Consistency check & packaging
